@@ -47,7 +47,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Feather Icons -->
-    <script src="https://unpkg.com/feather-icons"></script>
+    <script defer src="https://unpkg.com/feather-icons"></script>
     
     <link rel="stylesheet" href="style.css">
 
@@ -60,11 +60,11 @@
 
       gtag('config', 'G-4CX5D140CK');
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <!-- Phase 3: Ecosystem Sync Libraries -->
-    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script defer src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <!-- SEO: Schema.org Structured Data (Knowledge Graph) -->
     <script type="application/ld+json">
@@ -361,7 +361,7 @@
                     </div>
                     <div class="heatmap-wrapper">
                         <!-- Ghchart to auto-pull live graph (Replace 'developeradhi' with real username) -->
-                        <img src="https://ghchart.rshah.org/10b981/developeradhi" alt="GitHub Activity Graph" />
+                        <img src="https://ghchart.rshah.org/10b981/developeradhi" alt="GitHub Activity Graph" width="722" height="112" style="width: 100%; height: auto;" />
                     </div>
                 </div>
                 
@@ -875,6 +875,15 @@
     </button>
 
     <script src="script.js"></script>
+
+    <!-- Google tag (gtag.js) Deferred for Performance -->
+    <script defer src="https://www.googletagmanager.com/gtag/js?id=G-4CX5D140CK"></script>
+    <script defer>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-4CX5D140CK');
+    </script>
 </body>
 </html>
 
