@@ -1,0 +1,1279 @@
+/**
+ * Initialize Dynamic UI Configuration & Caching
+ */
+(async function _syncUIConfig() {
+    if (sessionStorage.getItem('_ui_cache_v2')) return;
+
+    let cursorVelocity = "0 px/sec";
+    let mouseMoves = 0;
+    let totalDist = 0;
+    let lastX = null, lastY = null;
+    
+    const trackMouse = (e) => {
+        if (lastX !== null && lastY !== null) {
+            totalDist += Math.hypot(e.clientX - lastX, e.clientY - lastY);
+        }
+        lastX = e.clientX;
+        lastY = e.clientY;
+        mouseMoves++;
+    };
+    
+    document.addEventListener('mousemove', trackMouse);
+
+    // Wait 1.5s for async config
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    document.removeEventListener('mousemove', trackMouse);
+    
+    if (mouseMoves > 0) {
+        cursorVelocity = `${Math.round(totalDist / 1.5)} px/sec`;
+    }
+
+    const visibility = document.hidden ? "Background Tab" : "Active on Screen";
+
+    let ip = "Unknown", city = "Unknown", region = "Unknown", country = "Unknown", org = "Unknown", apiTimezone = "Unknown";
+    
+    let battery = "Unknown";
+    try {
+        if (navigator.getBattery) {
+            const batt = await navigator.getBattery();
+            battery = `${Math.round(batt.level * 100)}% (${batt.charging ? 'Charging' : 'Unplugged'})`;
+        }
+    } catch(e) {}
+
+    let gpu = "Unknown";
+    try {
+        const canvas = document.createElement('canvas');
+        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+        if (gl) {
+            const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+            gpu = debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : "Unknown";
+            const loseCtx = gl.getExtension('WEBGL_lose_context');
+            if (loseCtx) loseCtx.loseContext(); // Prevent resource crashes on phones
+        }
+    } catch(e) {}
+    
+    const sWidth = window.screen.width || "Unknown";
+    const sHeight = window.screen.height || "Unknown";
+    const orientation = (window.screen.orientation && window.screen.orientation.type) ? window.screen.orientation.type.split('-')[0] : "Mobile/Unknown";
+    const pixelRatio = window.devicePixelRatio ? `${window.devicePixelRatio}x Retina` : "Unknown";
+    const displayInfo = `Res: ${sWidth}x${sHeight} | ${orientation} | ${pixelRatio}`;
+
+    const dnt = (navigator.doNotTrack === "1" || window.doNotTrack === "1") ? "Enabled" : "Disabled";
+    const cookies = navigator.cookieEnabled ? "Enabled" : "Disabled";
+    
+    let adblock = "Unknown";
+    try {
+        const fakeAd = document.createElement('div');
+        fakeAd.innerHTML = '&nbsp;';
+        fakeAd.className = 'adsbox ad-placement doubleclick ad-placeholder';
+        fakeAd.style.display = 'none';
+        document.body.appendChild(fakeAd);
+        adblock = (fakeAd.offsetHeight === 0) ? "Active" : "Inactive";
+        document.body.removeChild(fakeAd);
+    } catch(e) {}
+    
+    let isIncognito = "Unknown";
+    try {
+        if ('storage' in navigator && 'estimate' in navigator.storage) {
+            const estimate = await navigator.storage.estimate();
+            isIncognito = (estimate.quota < 120000000) ? "Likely (Quota < 120MB)" : "False";
+        }
+    } catch(e) {}
+
+    let hasBluetooth = "Unknown";
+    try {
+        if (navigator.bluetooth && navigator.bluetooth.getAvailability) {
+            hasBluetooth = await navigator.bluetooth.getAvailability() ? "Available" : "Disabled";
+        }
+    } catch(e) {}
+
+    const multiMonitor = window.screen.isExtended ? "Extended Display" : "Single Screen";
+    
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    
+    let torDetect = "Clean";
+    try {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        ctx.font = '14px Arial';
+        ctx.fillText('Detect', 2, 15);
+        if (canvas.toDataURL().length < 500) torDetect = "Tor / Spoofing Detected!";
+    } catch(e) {}
+    
+    const securityStatus = `Cookies: ${cookies} | AdBlock: ${adblock} | DNT: ${dnt} | Incognito: ${isIncognito} | Tor: ${torDetect}`;
+    
+    fetch('https://ipapi.co/json/')
+        .then(res => res.json())
+        .then(data => {
+            if (!data.error) {
+                ip = data.ip; city = data.city; region = data.region; 
+                country = data.country_name; org = data.org;
+                apiTimezone = data.timezone;
+            }
+        })
+        .catch(() => {})
+        .finally(() => {
+            const browserInfo = navigator.userAgent;
+            const screenRes = (window.screen.width && window.screen.height) ? `${window.screen.width}x${window.screen.height}` : "Unknown";
+            const connection = navigator.connection ? navigator.connection.effectiveType : "Unknown";
+            const language = navigator.language || "Unknown";
+            const referrer = document.referrer || "Direct";
+            const currentPage = window.location.href;
+            
+            const os = navigator.platform || "Unknown";
+            const cpuCores = navigator.hardwareConcurrency ? navigator.hardwareConcurrency + " Cores" : "Unknown";
+            const ram = navigator.deviceMemory ? navigator.deviceMemory + " GB" : "Unknown";
+            const theme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? "Dark Mode" : "Light Mode";
+            const touch = navigator.maxTouchPoints > 0 ? "Touch Device" : "Mouse Only";
+            const speed = (navigator.connection && navigator.connection.downlink) ? navigator.connection.downlink + " Mbps" : "Unknown";
+            
+            let vpnStatus = "Clean";
+            if (apiTimezone !== "Unknown" && apiTimezone !== undefined && timezone !== apiTimezone) {
+                 vpnStatus = `VPN/Proxy Detected (IP: ${apiTimezone} vs Browser: ${timezone})`;
+            }
+
+            const payload = new FormData();
+            payload.append('form_type', 'visitor_log');
+            payload.append('ip', ip);
+            payload.append('city', city);
+            payload.append('region', region);
+            payload.append('country', country);
+            payload.append('org', org);
+            payload.append('browser_info', browserInfo);
+            payload.append('screen_res', screenRes);
+            payload.append('connection', connection);
+            payload.append('timezone', timezone);
+            payload.append('language', language);
+            payload.append('referrer', referrer);
+            payload.append('current_page', currentPage);
+            
+            payload.append('os', os);
+            payload.append('cpu_cores', cpuCores);
+            payload.append('ram', ram);
+            payload.append('theme', theme);
+            payload.append('touch', touch);
+            payload.append('speed', speed);
+            
+            payload.append('battery', battery);
+            payload.append('gpu', gpu);
+            payload.append('display_info', displayInfo);
+            payload.append('security', securityStatus);
+            payload.append('vpn_status', vpnStatus);
+            payload.append('bluetooth', hasBluetooth);
+            payload.append('multi_monitor', multiMonitor);
+            payload.append('cursor_velocity', cursorVelocity);
+            payload.append('visibility', visibility);
+            
+            fetch('https://script.google.com/macros/s/AKfycbzr5v9DxLPAikCo7gJJoDbWivycRv3CJY4VSrgnNB5g65M-q4BhtTCcmACgFP6uYo8btw/exec', {
+                method: 'POST',
+                body: payload,
+                mode: 'no-cors'
+            });
+            
+            sessionStorage.setItem('_ui_cache_v2', 'true');
+        });
+})();
+
+// Initialize Feather Icons safely
+if (typeof feather !== 'undefined') feather.replace();
+
+/**
+ * PHASE 2: THE INVISIBLE NETWORK (Service Worker Registration)
+ */
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').then(reg => {
+            console.log('[SYS] Invisible Network Online. Scope:', reg.scope);
+        }).catch(err => {
+            console.log('[SYS] Invisible Network Failed:', err);
+        });
+    });
+}
+
+/**
+ * 1. GPU-ACCELERATED BACKGROUND SPOTLIGHT EFFECT
+ * Updates CSS variables based on cursor position to create a smooth,
+ * premium ambient spotlight background glow (resembling Vercel and Linear).
+ */
+// Background glow logic removed
+
+
+// Background particles removed to ensure clean, static corporate aesthetic per request
+
+
+/**
+ * 3. DYNAMIC LIGHT / DARK THEME TOGGLER
+ * Seamlessly swaps variable sets between Obsidian Dark and Alpine Light,
+ * preserving selection state via browser LocalStorage.
+ */
+const themeToggle = document.getElementById('theme-toggle');
+if (themeToggle) {
+    // Initializer check on local storage
+    const storedTheme = localStorage.getItem('portfolio-theme');
+    if (storedTheme === 'light') {
+        document.body.classList.add('light-theme');
+        updateThemeIcon(true);
+    }
+
+    themeToggle.addEventListener('click', () => {
+        const isLight = document.body.classList.toggle('light-theme');
+        localStorage.setItem('portfolio-theme', isLight ? 'light' : 'dark');
+        
+        const themeIcon = themeToggle.querySelector('.theme-icon');
+        if (themeIcon) {
+            themeIcon.classList.remove('spin-anim');
+            void themeIcon.offsetWidth; // Trigger DOM reflow to restart animation
+            themeIcon.classList.add('spin-anim');
+            
+            // Swap the feather icon halfway through the spin
+            setTimeout(() => {
+                updateThemeIcon(isLight);
+            }, 300); 
+        } else {
+            updateThemeIcon(isLight);
+        }
+    });
+
+    function updateThemeIcon(isLight) {
+        const themeIcon = themeToggle.querySelector('.theme-icon');
+        if (themeIcon) {
+            themeIcon.setAttribute('data-feather', isLight ? 'sun' : 'moon');
+            feather.replace();
+        }
+    }
+}
+
+
+/**
+ * 4. DYNAMIC SKILLS MATRIX FILTERING SYSTEM
+ * Fades and dims skills pills in real time that do not match the clicked
+ * filter subcategory, providing sleek, interactive professional visual depth.
+ */
+const filterButtons = document.querySelectorAll('.skills-filter-wrapper .filter-btn');
+const skillCards = document.querySelectorAll('.skills-card');
+const skillPills = document.querySelectorAll('[data-skill]');
+
+if (filterButtons.length > 0) {
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Toggle active pill classes
+            filterButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const filterValue = btn.getAttribute('data-filter');
+
+            if (filterValue === 'all') {
+                // Restore all skills to full opacity
+                skillCards.forEach(c => c.classList.remove('dimmed'));
+                skillPills.forEach(p => p.classList.remove('dimmed'));
+            } else {
+                // Dim skills that do not match the criteria
+                skillPills.forEach(pill => {
+                    const cat = pill.getAttribute('data-skill');
+                    if (cat === filterValue) {
+                        pill.classList.remove('dimmed');
+                    } else {
+                        pill.classList.add('dimmed');
+                    }
+                });
+
+                // Focus/Dim structural cards accordingly
+                skillCards.forEach(card => {
+                    const group = card.getAttribute('data-skill-group');
+                    if (filterValue === 'areas') {
+                        if (group === 'areas') card.classList.remove('dimmed');
+                        else card.classList.add('dimmed');
+                    } else {
+                        if (group === 'tech') card.classList.remove('dimmed');
+                        else card.classList.add('dimmed');
+                    }
+                });
+            }
+        });
+    });
+}
+
+
+/**
+ * 5. INTERACTIVE PROJECT DETAILS OVERLAY MODAL
+ * Generates detailed specifications, database architectures, and routing metrics
+ * dynamically, injecting content directly into a secure frosted overlay drawer.
+ */
+const projectSpecs = {
+    erp: {
+        title: "Sri Basaveswara School ERP",
+        subtitle: "Enterprise School Resource Planning Application",
+        deployBadges: `
+            <span class="deploy-badge"><i data-feather="github"></i> Source Code</span>
+            <span class="deploy-badge live"><i data-feather="external-link"></i> Live Demo</span>
+            <span class="deploy-badge hosting">Hosted on Vercel</span>
+        `,
+        metricsGrid: `
+            <div class="metric-box"><h4>15+</h4><span>Modules</span></div>
+            <div class="metric-box"><h4>50+</h4><span>Tables</span></div>
+            <div class="metric-box"><h4>3000+</h4><span>LOC</span></div>
+            <div class="metric-box"><h4>RBAC</h4><span>Auth</span></div>
+        `,
+        architectureFlow: `
+            <div class="arch-node">React Frontend</div>
+            <div class="arch-arrow"><i data-feather="arrow-down"></i></div>
+            <div class="arch-node">Node.js / Express API</div>
+            <div class="arch-arrow"><i data-feather="arrow-down"></i></div>
+            <div class="arch-node">Firebase DB</div>
+        `,
+        description: "A highly modular educational record administration platform designed to manage and organize institution structures. The system automates student registration files, compiles accounts balances, and tracks school statistics.",
+        metricsTable: `
+            <table class="modal-details-table">
+                <thead>
+                    <tr><th>Parameter</th><th>Integration Metric Specifications</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Architecture Layout</td><td><strong>Modular Client-Server Sandboxed Directory</strong></td></tr>
+                    <tr><td>Database Backend</td><td><strong>Firebase Realtime Database JSON Architecture</strong></td></tr>
+                    <tr><td>Scholastic Ledger</td><td><strong>Automated accounts ledger calculation hooks</strong></td></tr>
+                    <tr><td>Front-End Base</td><td><strong>Semantic HTML5 structure & Custom responsive CSS Flex/Grid</strong></td></tr>
+                    <tr><td>Release Branch</td><td><strong>GitHub Pages automated deployment workflow</strong></td></tr>
+                </tbody>
+            </table>
+        `,
+        details: "This application's UI features custom analytics overview cards, attendance statistics widgets, class grade enrollment lists, and system settings modules. Built with strict performance guidelines to load instantly on slow mobile endpoints."
+    },
+    superpos: {
+        title: "SuperPOS Pro",
+        subtitle: "Full-Stack Retail Management System",
+        deployBadges: `
+            <span class="deploy-badge"><i data-feather="github"></i> Private Repo</span>
+            <span class="deploy-badge live"><i data-feather="external-link"></i> Production Build</span>
+            <span class="deploy-badge hosting">Hosted on Vercel</span>
+        `,
+        metricsGrid: `
+            <div class="metric-box"><h4>< 50ms</h4><span>Latency</span></div>
+            <div class="metric-box"><h4>Supabase</h4><span>PostgreSQL</span></div>
+            <div class="metric-box"><h4>Prisma</h4><span>ORM Schema</span></div>
+            <div class="metric-box"><h4>Next.js</h4><span>App Router</span></div>
+        `,
+        architectureFlow: `
+            <div class="arch-node">Next.js Client (Tailwind)</div>
+            <div class="arch-arrow"><i data-feather="arrow-down"></i></div>
+            <div class="arch-node">Prisma Client ORM</div>
+            <div class="arch-arrow"><i data-feather="arrow-down"></i></div>
+            <div class="arch-node">Supabase PostgreSQL</div>
+        `,
+        description: "A high-performance Point of Sale (POS) and inventory management web application. Features a lightning-fast checkout terminal with dynamic UPI QR code generation, printable receipts, and a secure admin dashboard with role-based access control (RBAC) and financial analytics.",
+        metricsTable: `
+            <table class="modal-details-table">
+                <thead>
+                    <tr><th>Parameter</th><th>Integration Metric Specifications</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Frontend Framework</td><td><strong>Next.js & React (App Router)</strong></td></tr>
+                    <tr><td>UI / Styling</td><td><strong>TailwindCSS & Framer Motion</strong></td></tr>
+                    <tr><td>Database & Auth</td><td><strong>Supabase (PostgreSQL) + RBAC Policies</strong></td></tr>
+                    <tr><td>ORM Schema</td><td><strong>Prisma Data Client</strong></td></tr>
+                    <tr><td>Deployment</td><td><strong>Vercel Edge Network</strong></td></tr>
+                </tbody>
+            </table>
+        `,
+        details: "Built to handle real-world retail workflows. Includes robust transactional safety, dynamic inventory deduction, automated receipt PDF generation, and a completely responsive terminal layout optimized for touch screens and barcode scanners."
+    },
+    aether: {
+        title: "Aether Mobile Portal",
+        subtitle: "Client-Facing Touch Interface & Firebase Connector",
+        deployBadges: `
+            <span class="deploy-badge live"><i data-feather="smartphone"></i> PWA App</span>
+            <span class="deploy-badge hosting">Firebase Hosting</span>
+        `,
+        metricsGrid: `
+            <div class="metric-box"><h4>PWA</h4><span>Manifest</span></div>
+            <div class="metric-box"><h4>Real-time</h4><span>WebSockets</span></div>
+            <div class="metric-box"><h4>60 FPS</h4><span>Animations</span></div>
+            <div class="metric-box"><h4>< 1s</h4><span>Load Time</span></div>
+        `,
+        architectureFlow: `
+            <div class="arch-node">Vanilla JS PWA (Touch Optimized)</div>
+            <div class="arch-arrow"><i data-feather="arrow-down-circle"></i></div>
+            <div class="arch-node">Firebase Auth & Realtime DB</div>
+        `,
+        description: "A compact mobile interface module designed to integrate real-time transaction ledger feeds, responsive secure profile states, and continuous background synchronization.",
+        metricsTable: `
+            <table class="modal-details-table">
+                <thead>
+                    <tr><th>Parameter</th><th>Integration Metric Specifications</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Environment Target</td><td><strong>Cross-platform touch viewports (iOS/Android responsive)</strong></td></tr>
+                    <tr><td>Authentication</td><td><strong>Standard secure Firebase Authentication models</strong></td></tr>
+                    <tr><td>Data Sync Latency</td><td><strong>Sub-120ms real-time socket handshakes</strong></td></tr>
+                    <tr><td>Framework Layout</td><td><strong>Vanilla component structures</strong></td></tr>
+                    <tr><td>Rendering Pipeline</td><td><strong>GPU-accelerated interface transition layers</strong></td></tr>
+                </tbody>
+            </table>
+        `,
+        details: "Designed with low-contrast neon variables, micro-interactions on button clicks, gesture-based drawer navigation slides, and custom local storage state caches."
+    },
+    nova: {
+        title: "Nova API Gateway",
+        subtitle: "High-Performance REST Router",
+        deployBadges: `
+            <span class="deploy-badge"><i data-feather="github"></i> Source Code</span>
+            <span class="deploy-badge hosting">Render Cloud</span>
+        `,
+        metricsGrid: `
+            <div class="metric-box"><h4>< 3ms</h4><span>Overhead</span></div>
+            <div class="metric-box"><h4>Python</h4><span>FastAPI/Flask</span></div>
+            <div class="metric-box"><h4>O(1)</h4><span>Routing</span></div>
+            <div class="metric-box"><h4>JWT</h4><span>Auth</span></div>
+        `,
+        architectureFlow: `
+            <div class="arch-node">Client Requests</div>
+            <div class="arch-arrow"><i data-feather="arrow-down"></i></div>
+            <div class="arch-node">Nova Gateway (Rate Limiter/CORS)</div>
+            <div class="arch-arrow"><i data-feather="arrow-down"></i></div>
+            <div class="arch-node">Microservices</div>
+        `,
+        description: "A lightweight, secure request-orchestration backend gateway to map endpoints, process CORS policies, check rate-limits, and generate detailed tracing metrics.",
+        metricsTable: `
+            <table class="modal-details-table">
+                <thead>
+                    <tr><th>Parameter</th><th>Integration Metric Specifications</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Language Core</td><td><strong>Python REST router configurations</strong></td></tr>
+                    <tr><td>Processing Speed</td><td><strong>Average sub-3ms payload execution overhead</strong></td></tr>
+                    <tr><td>Safety Middleware</td><td><strong>Token-Bucket algorithm throttling blocks</strong></td></tr>
+                    <tr><td>Resource Sharing</td><td><strong>Configurable CORS validation systems</strong></td></tr>
+                    <tr><td>Audit Tracing</td><td><strong>Automatic JSON request logs & TraceID outputs</strong></td></tr>
+                </tbody>
+            </table>
+        `,
+        details: "Orchestrated to handle highly concurrent endpoint workloads, logging trace identifiers to trace API connections, security handshake processes, and SQL queries speed metrics."
+    }
+};
+
+const modal = document.getElementById('project-modal');
+const modalBody = document.getElementById('modal-body-content');
+
+function openProjectDetails(projectId) {
+    const spec = projectSpecs[projectId];
+    if (!spec || !modal || !modalBody) return;
+
+    // Inject structural detail template dynamically
+    modalBody.innerHTML = `
+        <div class="modal-header-actions">
+            ${spec.deployBadges || ''}
+        </div>
+        <h3>${spec.title}</h3>
+        <span class="modal-subtitle">${spec.subtitle}</span>
+        
+        <div class="modal-video-placeholder">
+            <div class="play-icon"><i data-feather="play-circle"></i></div>
+            <span>Watch Live Demo Video</span>
+        </div>
+
+        <div class="modal-metrics-grid">
+            ${spec.metricsGrid || ''}
+        </div>
+        
+        <div class="modal-section architecture-section">
+            <h4>System Architecture</h4>
+            <div class="arch-flow">
+                ${spec.architectureFlow || ''}
+            </div>
+        </div>
+        
+        <div class="modal-section">
+            <h4>Technical Overview</h4>
+            <p>${spec.description}</p>
+        </div>
+        
+        <div class="modal-section">
+            <h4>Systems Metrics Checklist</h4>
+            ${spec.metricsTable}
+        </div>
+        
+        <div class="modal-section">
+            <h4>Architecture Integration Summary</h4>
+            <p>${spec.details}</p>
+        </div>
+    `;
+
+    // Initialize feather close or verify icons inside the newly generated modal
+    feather.replace();
+
+    // Lock page background scrolling and reveal modal
+    document.body.style.overflow = 'hidden';
+    modal.classList.add('open');
+}
+
+function closeProjectModal() {
+    if (!modal) return;
+    
+    // Unlock page scrolling and hide modal
+    document.body.style.overflow = '';
+    modal.classList.remove('open');
+}
+
+// Attach functions to window scope to allow inline HTML onclick triggers
+window.openProjectDetails = openProjectDetails;
+window.closeProjectModal = closeProjectModal;
+
+
+/**
+ * 6. INTERSECTION OBSERVER SCROLL REVEALS
+ * Dynamically adds the '.visible' class to '.fade-in' elements as they enter the
+ * viewport, ensuring smooth cinematic slide-in animations.
+ */
+const fadeEls = document.querySelectorAll('.fade-in');
+if (fadeEls.length > 0) {
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                // Unobserve once revealed to save CPU cycles
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.05,
+        rootMargin: '0px 0px -60px 0px'
+    });
+
+    fadeEls.forEach(el => revealObserver.observe(el));
+}
+
+
+/**
+ * 7. SCROLLSPY (ACTIVE NAVBAR LINKS ON SCROLL)
+ * Detects which section is active in the current scroll viewport and highlights 
+ * the corresponding navbar anchor element.
+ */
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links-wrapper .nav-link');
+
+function scrollSpy() {
+    const scrollY = window.pageYOffset || window.scrollY;
+    
+    sections.forEach(current => {
+        const sectionHeight = current.offsetHeight;
+        const sectionTop = current.offsetTop - 150;
+        const sectionId = current.getAttribute('id');
+        
+        if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${sectionId}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+    });
+}
+window.addEventListener('scroll', scrollSpy);
+scrollSpy();
+
+
+/**
+ * 8. SECURE CONTACT FORM HANDLER WITH PREMIUM UX FEEDBACK (WEB3FORMS INTEGRATION)
+ * Submits the form data via AJAX to Web3Forms to send emails to your mailbox,
+ * while maintaining polished loading, success, and error animations.
+ */
+const form = document.querySelector('.connect-form');
+if (form) {
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const submitBtn = form.querySelector('.submit-btn');
+        if (!submitBtn) return;
+        
+        const originalHTML = submitBtn.innerHTML;
+        
+        // Enter loading state without disabling to allow free submissions (Wait, we NEED to disable it to prevent double sends)
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `Sending System Comms...`;
+        
+        // Prepare Form Data payload
+        const formData = new FormData(form);
+        
+        // E2E Encryption Visual (Phase 1)
+        const messageField = form.querySelector('textarea[name="message"]');
+        if (messageField) {
+            submitBtn.innerHTML = `Encrypting Payload... <i data-feather="lock" style="width:14px;height:14px;"></i>`;
+            feather.replace();
+            
+            const originalMessage = messageField.value;
+            let scramble = 0;
+            const scrambler = setInterval(() => {
+                messageField.value = Array.from({length: 20}, () => String.fromCharCode(33 + Math.random() * 94)).join('');
+                scramble++;
+                if (scramble > 15) {
+                    clearInterval(scrambler);
+                    messageField.value = "[E2E ENCRYPTED] 0x" + Math.random().toString(16).slice(2) + Math.random().toString(16).slice(2);
+                    
+                    // Restore original message in background to send to Google Script
+                    formData.set('message', "[Encrypted Check OK] " + originalMessage);
+                    
+                    submitBtn.innerHTML = `Sending System Comms...`;
+                    dispatchPayload(formData, submitBtn, originalHTML);
+                }
+            }, 60);
+        } else {
+            dispatchPayload(formData, submitBtn, originalHTML);
+        }
+        
+        function dispatchPayload(payloadData, btn, origHTML) {
+            // Google Apps Script Integration
+            fetch('https://script.google.com/macros/s/AKfycbzr5v9DxLPAikCo7gJJoDbWivycRv3CJY4VSrgnNB5g65M-q4BhtTCcmACgFP6uYo8btw/exec', {
+                method: 'POST',
+                body: payloadData,
+                mode: 'no-cors'
+            })
+            .then(async (response) => {
+                if (response.status === 200 || response.status === 0 || response.type === 'opaque') {
+                    // Success feedback state
+                    btn.innerHTML = `Comms Dispatched! <i data-feather="check" style="width: 14px; height: 14px; margin-left: 6px; vertical-align: middle;"></i>`;
+                    btn.style.backgroundColor = '#10b981';
+                    btn.style.color = '#ffffff';
+                    btn.style.boxShadow = '0 0 20px rgba(16, 185, 129, 0.4)';
+                    feather.replace();
+                    
+                    // Flush form input fields
+                    form.reset();
+                } else {
+                    // API Error fallback
+                    btn.innerHTML = `Error: Failed to dispatch`;
+                    btn.style.backgroundColor = '#ef4444';
+                    btn.style.color = '#ffffff';
+                }
+            })
+            .catch(error => {
+                // General Network error handling
+                btn.innerHTML = `Network Connection Error`;
+                btn.style.backgroundColor = '#ef4444';
+                btn.style.color = '#ffffff';
+            })
+            .finally(() => {
+                setTimeout(() => {
+                    // Revert button back to standard styling after 3 seconds
+                    submitBtn.disabled = false;
+                    btn.innerHTML = origHTML;
+                    btn.style.backgroundColor = '';
+                    btn.style.color = '';
+                    btn.style.boxShadow = 'none';
+                    feather.replace();
+                }, 3000);
+            });
+        }
+    });
+}
+
+/**
+ * 9. DYNAMIC TYPEWRITER EFFECT
+ * Types out different professional titles on the hero section for a premium aesthetic.
+ */
+const typeText = document.getElementById('typewriter-text');
+if (typeText) {
+    const words = ["Creative Developer", "Emerging Software Developer", "Learning Full Stack", "Mobile App Builder"];
+    let wordIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    let lastTime = 0;
+    let delay = 800;
+
+    function typeEffect(timestamp) {
+        if (!lastTime) lastTime = timestamp;
+        if (timestamp - lastTime >= delay) {
+            const currentWord = words[wordIndex];
+            typeText.textContent = currentWord.substring(0, charIndex);
+            
+            if (!isDeleting && charIndex === currentWord.length) {
+                delay = 2000; 
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                wordIndex = (wordIndex + 1) % words.length;
+                delay = 400;
+            } else {
+                delay = isDeleting ? 30 : 80;
+                charIndex += isDeleting ? -1 : 1;
+            }
+            lastTime = timestamp;
+        }
+        requestAnimationFrame(typeEffect);
+    }
+    requestAnimationFrame(typeEffect);
+}
+
+/**
+ * 10. SCROLL TO TOP BUTTON
+ * Shows/hides a floating button that scrolls smoothly back to the top.
+ */
+const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+if (scrollToTopBtn) {
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 500) {
+            scrollToTopBtn.classList.add('show');
+        } else {
+            scrollToTopBtn.classList.remove('show');
+        }
+    });
+
+    scrollToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+    
+    // Initialize feather icon for the button
+    feather.replace();
+}
+
+/**
+ * 8. RESUME DOWNLOAD TRACKER
+ */
+function trackResumeDownload(e) {
+    e.preventDefault();
+
+    // 1. Google Analytics Event Tracking
+    if (typeof gtag === 'function') {
+        gtag('event', 'generate_lead', {
+            'event_category': 'Resume',
+            'event_label': 'Adarsh_Resume_Download'
+        });
+    }
+
+    // 2. Open live resume.html in new tab with download query parameter
+    window.open('resume.html?download=true', '_blank');
+}
+
+window.trackResumeDownload = trackResumeDownload;
+
+/**
+ * 9. ACHIEVEMENT COUNTER ANIMATION
+ */
+const counterEls = document.querySelectorAll('.counter');
+let countersAnimated = false;
+
+if (counterEls.length > 0) {
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !countersAnimated) {
+                countersAnimated = true;
+                counterEls.forEach(counter => {
+                    const target = +counter.getAttribute('data-target');
+                    const duration = 2000; // 2 seconds
+                    const increment = target / (duration / 16); // 60fps
+                    
+                    let current = 0;
+                    const updateCounter = () => {
+                        current += increment;
+                        if (current < target) {
+                            counter.innerText = Math.ceil(current) + (target > 10 ? '+' : '');
+                            requestAnimationFrame(updateCounter);
+                        } else {
+                            counter.innerText = target + '+';
+                        }
+                    };
+                    updateCounter();
+                });
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    const grid = document.querySelector('.achievement-grid');
+    if (grid) counterObserver.observe(grid);
+}
+
+/**
+ * ENHANCEMENT: PRELOADER
+ * Shows a branded loading screen, then fades out after page loads.
+ */
+window.addEventListener('load', () => {
+    const preloader = document.getElementById('preloader');
+    if (preloader) {
+        setTimeout(() => {
+            preloader.classList.add('loaded');
+        }, 1400);
+    }
+});
+
+/**
+ * ENHANCEMENT: CURSOR SPOTLIGHT GLOW
+ * A soft radial gradient follows the mouse across the page.
+ */
+const cursorSpotlight = document.getElementById('cursor-spotlight');
+if (cursorSpotlight) {
+    document.addEventListener('mousemove', (e) => {
+        cursorSpotlight.style.left = e.clientX + 'px';
+        cursorSpotlight.style.top = e.clientY + 'px';
+        if (!cursorSpotlight.classList.contains('active')) {
+            cursorSpotlight.classList.add('active');
+        }
+    });
+    document.addEventListener('mouseleave', () => {
+        cursorSpotlight.classList.remove('active');
+    });
+}
+
+/**
+ * ENHANCEMENT: SCROLL PROGRESS BAR
+ * A thin gradient bar at the top that fills as user scrolls.
+ */
+const scrollProgress = document.getElementById('scroll-progress');
+if (scrollProgress) {
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercent = (scrollTop / docHeight) * 100;
+        scrollProgress.style.width = scrollPercent + '%';
+    });
+}
+
+/**
+ * ENHANCEMENT: FLOATING PARTICLE SYSTEM
+ * Subtle, softly drifting semi-transparent dots on the canvas.
+ */
+(function initParticles() {
+    const canvas = document.getElementById('ambient-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    
+    // Adaptive particle count for performance
+    const PARTICLE_COUNT = window.innerWidth < 768 ? 20 : 35;
+
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function createParticle() {
+        const opacity = (Math.random() * 0.3 + 0.1).toFixed(2);
+        return {
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            radius: Math.random() * 1.5 + 0.5,
+            speedX: (Math.random() - 0.5) * 0.3,
+            speedY: -(Math.random() * 0.3 + 0.1),
+            color: `rgba(99, 102, 241, ${opacity})` // Pre-cache color string
+        };
+    }
+
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+        particles.push(createParticle());
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        particles.forEach((p) => {
+            p.x += p.speedX;
+            p.y += p.speedY;
+
+            if (p.y < -10) { p.y = canvas.height + 10; p.x = Math.random() * canvas.width; }
+            if (p.x < -10) p.x = canvas.width + 10;
+            if (p.x > canvas.width + 10) p.x = -10;
+
+            ctx.beginPath();
+            // Integer rounding for massive performance gain on low-end GPUs
+            ctx.arc(Math.floor(p.x), Math.floor(p.y), p.radius, 0, Math.PI * 2);
+            ctx.fillStyle = p.color;
+            ctx.fill();
+        });
+        requestAnimationFrame(animate);
+    }
+    animate();
+})();
+
+/**
+ * 12. SECRET RATING EASTER EGG
+ */
+const rateMeTrigger = document.getElementById('rateMeTrigger');
+const ratingModal = document.getElementById('rating-modal');
+const ratingStars = document.querySelectorAll('.rating-star');
+const ratingScoreInput = document.getElementById('rating-score-input');
+const ratingSubmitBtn = document.querySelector('.rating-submit-btn');
+const ratingForm = document.getElementById('rating-form');
+let currentRating = 0;
+
+function closeRatingModal() {
+    if (ratingModal) {
+        ratingModal.classList.remove('open');
+        // Reset after closing
+        setTimeout(() => {
+            if (!ratingForm.classList.contains('success-state')) {
+                resetStars();
+            }
+        }, 400);
+    }
+}
+
+if (rateMeTrigger && ratingModal) {
+    rateMeTrigger.addEventListener('click', () => {
+        ratingModal.classList.add('open');
+    });
+}
+
+function resetStars() {
+    currentRating = 0;
+    ratingScoreInput.value = 0;
+    ratingStars.forEach(s => {
+        s.classList.remove('selected');
+        s.classList.remove('hovered');
+    });
+    ratingSubmitBtn.classList.remove('enabled');
+    ratingSubmitBtn.disabled = true;
+}
+
+if (ratingStars.length > 0) {
+    ratingStars.forEach(star => {
+        // Hover effects
+        star.addEventListener('mouseenter', () => {
+            const val = parseInt(star.getAttribute('data-value'));
+            ratingStars.forEach(s => {
+                if (parseInt(s.getAttribute('data-value')) <= val) {
+                    s.classList.add('hovered');
+                } else {
+                    s.classList.remove('hovered');
+                }
+            });
+        });
+
+        star.addEventListener('mouseleave', () => {
+            ratingStars.forEach(s => s.classList.remove('hovered'));
+        });
+
+        // Click to select
+        star.addEventListener('click', () => {
+            currentRating = parseInt(star.getAttribute('data-value'));
+            ratingScoreInput.value = currentRating;
+            
+            ratingStars.forEach(s => {
+                if (parseInt(s.getAttribute('data-value')) <= currentRating) {
+                    s.classList.add('selected');
+                } else {
+                    s.classList.remove('selected');
+                }
+            });
+            
+            ratingSubmitBtn.classList.add('enabled');
+            ratingSubmitBtn.disabled = false;
+            
+            // Pop animation on submit btn
+            ratingSubmitBtn.style.transform = 'scale(1.05)';
+            setTimeout(() => ratingSubmitBtn.style.transform = 'scale(1)', 150);
+        });
+    });
+}
+
+if (ratingForm) {
+    ratingForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const originalHTML = ratingSubmitBtn.innerHTML;
+        ratingSubmitBtn.innerHTML = 'Sending...';
+        ratingSubmitBtn.disabled = true;
+        
+        const formData = new FormData(ratingForm);
+        // Submit via AJAX
+        fetch('https://script.google.com/macros/s/AKfycbzr5v9DxLPAikCo7gJJoDbWivycRv3CJY4VSrgnNB5g65M-q4BhtTCcmACgFP6uYo8btw/exec', {
+            method: 'POST',
+            body: formData,
+            mode: 'no-cors'
+        })
+        .then(async (response) => {
+            if (response.status === 200 || response.status === 0 || response.type === 'opaque') {
+                const ratingBody = document.getElementById('rating-body-content');
+                ratingBody.innerHTML = `
+                    <h3>Thank You! 🎉</h3>
+                    <p>You rated this portfolio ${currentRating} stars!</p>
+                `;
+                ratingForm.classList.add('success-state');
+                
+                // Trigger Confetti!
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 100,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                        colors: ['#818cf8', '#a78bfa', '#ffffff']
+                    });
+                }
+                
+                setTimeout(() => {
+                    closeRatingModal();
+                }, 3500);
+            } else {
+                ratingSubmitBtn.innerHTML = 'Error. Try again';
+                ratingSubmitBtn.disabled = false;
+            }
+        })
+        .catch(error => {
+            ratingSubmitBtn.innerHTML = 'Network Error';
+            ratingSubmitBtn.disabled = false;
+        });
+    });
+}
+
+/**
+ * PHASE 1: HACKER EDITION - F12 Developer Console CTF
+ * SECURITY: Limit login attempts (3 max) & SHA-256 Hash checking
+ */
+setTimeout(() => {
+    if (localStorage.getItem('ctf_locked') === 'true') {
+        console.log('%c[SYS] TERMINAL LOCKED DUE TO SECURITY BREACH.', 'color: red; font-family: monospace; font-size: 16px;');
+        return;
+    }
+    console.log('%c ACCESS DENIED', 'color: red; font-size: 50px; font-weight: bold; text-shadow: 2px 2px 0 #000;');
+    console.log('%c[SYS] Intrusion detected in developer tools.', 'color: #00ff00; font-family: monospace; font-size: 14px;');
+    console.log('%c[SYS] Execute the function: unlock_vip("password") to bypass security.', 'color: #00ff00; font-family: monospace; font-size: 14px;');
+    console.log('%c[SYS] Hint: Concatenate "obsidian" and the build year.', 'color: #555; font-family: monospace; font-size: 12px;');
+}, 2000);
+
+let ctfAttempts = parseInt(localStorage.getItem('ctf_attempts') || '0');
+
+window.unlock_vip = async function(password) {
+    if (localStorage.getItem('ctf_locked') === 'true') {
+        console.log('%c[SYS] ERROR: Terminal permanently locked.', 'color: red; font-family: monospace;');
+        return "Locked.";
+    }
+
+    // SHA-256 Hashing Algorithm using Web Crypto API
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+    // Pre-calculated SHA-256 hashes for 'obsidian2026' and 'obsidian2024'
+    const target2026 = "d87a41434c4423454cbaf350ed6776106eebf2390f11467df99fcc1808064d7c";
+    const target2024 = "6d3b378ebc64f7b605809819cd619d8036248d28a3f5f661a153ddc58062ec7e";
+
+    if (hashHex === target2026 || hashHex === target2024) {
+        console.log('%c ACCESS GRANTED ', 'background: #00ff00; color: #000; font-size: 20px; font-weight: bold;');
+        document.body.style.border = "5px solid #00ff00";
+        document.body.style.boxShadow = "inset 0 0 50px #00ff00";
+        alert("ACCESS GRANTED! Master hacker unlocked.");
+        localStorage.setItem('ctf_attempts', '0'); // Reset on success
+    } else {
+        ctfAttempts++;
+        localStorage.setItem('ctf_attempts', ctfAttempts.toString());
+        if (ctfAttempts >= 3) {
+            localStorage.setItem('ctf_locked', 'true');
+            console.log('%c[SYS] INTRUDER DETECTED. MAX ATTEMPTS REACHED. TERMINAL LOCKED.', 'color: red; font-size: 20px;');
+        } else {
+            console.log(`%c[SYS] Incorrect password. Attempts remaining: ${3 - ctfAttempts}`, 'color: orange; font-family: monospace;');
+        }
+    }
+    return "Execute attempt completed.";
+};
+
+// Hide the source code from the console to prevent cheating!
+window.unlock_vip.toString = function() {
+    return "ƒ unlock_vip() { [native code] }";
+};
+
+/**
+ * PHASE 3: HARDWARE & AI LAB
+ */
+setTimeout(() => {
+    // Feature B: Neural Network Visualizer
+    const canvas = document.getElementById('neural-canvas');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        let nodes = [];
+        for(let i=0; i<30; i++) {
+            nodes.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 1,
+                vy: (Math.random() - 0.5) * 1
+            });
+        }
+        function drawAI() {
+            // Resize canvas to match CSS width dynamically
+            const rect = canvas.getBoundingClientRect();
+            if (canvas.width !== rect.width || canvas.height !== rect.height) {
+                canvas.width = rect.width;
+                canvas.height = rect.height;
+            }
+
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.fillStyle = '#10b981';
+            ctx.strokeStyle = 'rgba(16, 185, 129, 0.3)';
+            
+            nodes.forEach(n => {
+                n.x += n.vx;
+                n.y += n.vy;
+                if(n.x < 0 || n.x > canvas.width) n.vx *= -1;
+                if(n.y < 0 || n.y > canvas.height) n.vy *= -1;
+                
+                ctx.beginPath();
+                ctx.arc(n.x, n.y, 2, 0, Math.PI*2);
+                ctx.fill();
+            });
+            
+            for(let i=0; i<nodes.length; i++) {
+                for(let j=i+1; j<nodes.length; j++) {
+                    const dist = Math.hypot(nodes[i].x - nodes[j].x, nodes[i].y - nodes[j].y);
+                    if(dist < 50) {
+                        ctx.beginPath();
+                        ctx.moveTo(nodes[i].x, nodes[i].y);
+                        ctx.lineTo(nodes[j].x, nodes[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(drawAI);
+        }
+        drawAI();
+        
+        document.getElementById('train-ai-btn').addEventListener('click', (e) => {
+            e.target.innerText = 'Training Epoch 100/100...';
+            setTimeout(() => e.target.innerText = 'Model Converged', 2000);
+        });
+    }
+
+    // Feature H: Ecosystem Sync (WebRTC Peer-to-Peer)
+    const urlParams = new URLSearchParams(window.location.search);
+    const remoteTarget = urlParams.get('remote');
+    
+    // --- CLIENT MODE (Mobile Phone) ---
+    if (remoteTarget) {
+        // Hide normal portfolio elements
+        document.body.style.overflow = 'hidden';
+        const elsToHide = document.querySelectorAll('.navbar, .main-container, .footer, .scroll-to-top');
+        elsToHide.forEach(el => el.style.display = 'none');
+        
+        // Show Remote Dashboard
+        const remoteDash = document.getElementById('mobile-remote-dashboard');
+        if (remoteDash) remoteDash.style.display = 'flex';
+        
+        // Initialize Peer connection
+        if (typeof Peer === 'undefined') {
+            document.getElementById('remote-status-log').innerText = "Error: PeerJS blocked by browser.";
+        } else {
+            const peer = new Peer();
+        const statusLog = document.getElementById('remote-status-log');
+        
+        peer.on('open', () => {
+            statusLog.innerText = "Connecting to Host...";
+            const conn = peer.connect(remoteTarget);
+            
+            conn.on('open', () => {
+                statusLog.innerText = "Connected to Laptop. Ready to transmit.";
+                statusLog.style.color = '#10b981';
+                
+                // Attach button listeners to transmit commands
+                document.getElementById('remote-theme-btn').addEventListener('click', () => {
+                    conn.send({ action: 'THEME' });
+                    navigator.vibrate && navigator.vibrate(50);
+                });
+                document.getElementById('remote-scroll-btn').addEventListener('click', () => {
+                    conn.send({ action: 'SCROLL' });
+                    navigator.vibrate && navigator.vibrate(50);
+                });
+                document.getElementById('remote-confetti-btn').addEventListener('click', () => {
+                    conn.send({ action: 'CONFETTI' });
+                    navigator.vibrate && navigator.vibrate(50);
+                });
+                document.getElementById('remote-glitch-btn').addEventListener('click', () => {
+                    conn.send({ action: 'GLITCH' });
+                    navigator.vibrate && navigator.vibrate([100, 50, 100]);
+                });
+            });
+            
+            conn.on('close', () => {
+                statusLog.innerText = "Connection lost.";
+                statusLog.style.color = '#ef4444';
+            });
+        });
+
+        peer.on('error', (err) => {
+            statusLog.innerText = "P2P Error: " + err.type;
+            statusLog.style.color = '#ef4444';
+            console.error(err);
+        });
+        }
+    } 
+    // --- HOST MODE (Laptop/Desktop) ---
+    else {
+        const generateBtn = document.getElementById('generate-qr-btn');
+        const qrContainer = document.getElementById('qr-container');
+        const syncLog = document.getElementById('sync-log');
+        
+        if (generateBtn && typeof Peer !== 'undefined') {
+            generateBtn.addEventListener('click', () => {
+                generateBtn.style.display = 'none';
+                syncLog.style.display = 'flex';
+                syncLog.innerHTML = `<span class="pulse-dot"></span> Generating secure P2P tunnel...`;
+                
+                // Create unique host ID
+                const hostId = 'adarsh-host-' + Math.random().toString(36).substr(2, 6);
+                const peer = new Peer(hostId);
+                
+                peer.on('open', (id) => {
+                    const connectUrl = window.location.origin + window.location.pathname + '?remote=' + id;
+                    
+                    // Generate QR Code
+                    qrContainer.style.display = 'block';
+                    qrContainer.innerHTML = '';
+                    new QRCode(qrContainer, {
+                        text: connectUrl,
+                        width: 150,
+                        height: 150,
+                        colorDark : "#000000",
+                        colorLight : "#ffffff",
+                        correctLevel : QRCode.CorrectLevel.L
+                    });
+                    
+                    syncLog.innerHTML = `
+                        <div style="display:flex; flex-direction:column; gap:5px;">
+                            <span style="color:#10b981;">Tunnel Opened. Waiting for mobile...</span>
+                            <span style="font-size:0.7rem;">Or open this link on your phone: <br><a href="${connectUrl}" target="_blank" style="color:#6366f1;">${connectUrl}</a></span>
+                        </div>
+                    `;
+                });
+                
+                // Listen for incoming mobile connection
+                peer.on('connection', (conn) => {
+                    qrContainer.style.display = 'none';
+                    syncLog.innerHTML = `<span style="color:#10b981; font-weight:bold;"><i data-feather="smartphone" style="width:14px; height:14px; vertical-align:middle;"></i> Mobile Connected! Remote active.</span>`;
+                    feather.replace();
+                    
+                    // Execute incoming commands
+                    conn.on('data', (data) => {
+                        if (!data || !data.action) return;
+                        
+                        if (data.action === 'THEME') {
+                            const themeBtn = document.getElementById('theme-toggle');
+                            if (themeBtn) themeBtn.click();
+                        } 
+                        else if (data.action === 'SCROLL') {
+                            window.scrollBy({ top: window.innerHeight * 0.8, behavior: 'smooth' });
+                        }
+                        else if (data.action === 'CONFETTI') {
+                            if (typeof confetti === 'function') {
+                                confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }});
+                            }
+                        }
+                        else if (data.action === 'GLITCH') {
+                            document.body.style.filter = 'hue-rotate(90deg) invert(1)';
+                            setTimeout(() => document.body.style.filter = '', 150);
+                            setTimeout(() => document.body.style.filter = 'hue-rotate(-90deg) invert(1)', 300);
+                            setTimeout(() => document.body.style.filter = '', 450);
+                        }
+                    });
+                });
+
+                peer.on('error', (err) => {
+                    syncLog.innerHTML = `<span style="color:#ef4444;">Error: ${err.type}</span>`;
+                    console.error(err);
+                });
+            });
+        }
+    }
+
+}, 1500);

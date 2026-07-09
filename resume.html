@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Adarsh B A - Resume</title>
+    <style>
+        /* ============================================================
+           ATS-FRIENDLY RESUME — Strict Two-Page Setup
+           Paper: A4 Portrait | Margins: 20mm top/bottom, 15mm sides
+           Line Spacing: 1.15 | Font: Calibri / Segoe UI
+        ============================================================ */
+        @page {
+            size: A4 portrait;
+            margin: 0; /* Setting this to 0 disables browser headers/footers */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Calibri', 'Segoe UI', 'Cambria', sans-serif;
+            font-size: 11pt;
+            color: #000000;
+            background-color: #f3f4f6;
+            line-height: 1.15;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            padding: 2rem;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        /* ── PAGE CONTAINER ── */
+        .resume-page {
+            background-color: #FFFFFF;
+            width: 210mm;
+            height: 297mm;
+            padding: 20mm 15mm;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            position: relative;
+            box-sizing: border-box;
+            overflow: hidden; /* Prevent text bleeding outside the page boundary */
+        }
+
+        @media print {
+            body {
+                background-color: #FFFFFF !important;
+                display: block !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                box-sizing: border-box !important;
+            }
+            .resume-page {
+                width: 210mm !important;
+                height: 297mm !important;
+                padding: 20mm 15mm !important;
+                box-shadow: none !important;
+                border: none !important;
+                border-radius: 0 !important;
+                page-break-after: always !important;
+                page-break-inside: avoid !important;
+                break-after: always !important;
+                break-inside: avoid !important;
+                background-color: #FFFFFF !important;
+            }
+        }
+
+        /* ── LINKS ── */
+        a {
+            color: #000000;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* ── NAME ── */
+        .resume-name {
+            font-family: 'Calibri Light', 'Cambria', sans-serif;
+            font-size: 24pt;
+            font-weight: bold;
+            text-align: center;
+            color: #000000;
+            margin-bottom: 3pt;
+        }
+
+        /* ── ROLE TAGLINE ── */
+        .resume-role {
+            text-align: center;
+            font-size: 11.5pt;
+            color: #222222;
+            margin-bottom: 6pt;
+        }
+
+        /* ── CONTACT INFO ROW ── */
+        .contact-row {
+            text-align: center;
+            font-size: 10.5pt;
+            line-height: 1.8;
+            margin-bottom: 2pt;
+        }
+        .contact-sep {
+            margin: 0 6pt;
+            color: #555555;
+        }
+
+        /* ── DOWNLOAD TIMESTAMP ── */
+        .download-timestamp {
+            text-align: center;
+            font-size: 9.5pt;
+            color: #555555;
+            margin-bottom: 10pt;
+            font-style: italic;
+        }
+
+        /* ── SECTION HEADINGS ── */
+        .section-heading {
+            font-family: 'Calibri', sans-serif;
+            font-size: 13pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #000000;
+            margin-top: 10pt;
+            margin-bottom: 5pt;
+            padding-bottom: 3pt;
+            border-bottom: 1.5px solid #5A5A5A;
+        }
+
+        /* ── JOB TITLE / DEGREE / PROJECT NAME ── */
+        .entry-title {
+            font-family: 'Calibri', sans-serif;
+            font-size: 11.5pt;
+            font-weight: bold;
+            color: #000000;
+        }
+
+        /* ── ORGANIZATION / COMPANY / COLLEGE ── */
+        .entry-org {
+            font-family: 'Calibri', sans-serif;
+            font-size: 11pt;
+            font-style: italic;
+            color: #111111;
+            margin-bottom: 3pt;
+        }
+
+        /* ── DATE (Right Aligned) ── */
+        .entry-date {
+            font-family: 'Calibri', sans-serif;
+            font-size: 10.5pt;
+            color: #000000;
+        }
+
+        /* ── BODY PARAGRAPHS ── */
+        p {
+            font-family: 'Calibri', sans-serif;
+            font-size: 11pt;
+            color: #000000;
+            margin-bottom: 5pt;
+        }
+
+        /* ── BULLET LISTS ── */
+        ul {
+            margin: 2pt 0 5pt 1.4em;
+            padding: 0;
+        }
+        li {
+            font-family: 'Calibri', sans-serif;
+            font-size: 11pt;
+            line-height: 1.15;
+            margin-bottom: 2pt;
+            list-style-type: disc;
+        }
+
+        /* ── SKILLS TABLE ── */
+        .skills-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 5pt;
+        }
+        .skills-table td {
+            font-family: 'Calibri', sans-serif;
+            font-size: 11pt;
+            padding: 2pt 0;
+            vertical-align: top;
+        }
+        .skills-table td:first-child {
+            font-weight: bold;
+            width: 185px;
+            white-space: nowrap;
+            padding-right: 10px;
+        }
+
+        /* ── ENTRY BLOCKS ── */
+        .entry-block {
+            margin-bottom: 9pt;
+        }
+        .entry-block:last-of-type {
+            margin-bottom: 0;
+        }
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        /* ── TECHNOLOGIES LINE ── */
+        .tech-line {
+            font-style: italic;
+            font-size: 10.5pt;
+            color: #333333;
+            margin-bottom: 3pt;
+        }
+
+        /* ── TWO COLUMN LISTS ── */
+        .two-column-list {
+            column-count: 2;
+            column-gap: 24px;
+            margin: 2pt 0 5pt 0;
+            padding-left: 1.2em;
+        }
+        .two-column-list li {
+            break-inside: avoid;
+            page-break-inside: avoid;
+            margin-bottom: 2pt;
+            list-style-type: disc;
+        }
+
+        /* ── PAGE FOOTER / NUMBERS ── */
+        .page-footer {
+            position: absolute;
+            bottom: 12mm;
+            right: 15mm;
+            font-size: 9pt;
+            color: #666666;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 📄 PAGE 1 -->
+    <div class="resume-page" id="page-1">
+        <div class="resume-name">ADARSH B A</div>
+        <div class="resume-role">Aspiring Software Engineer &nbsp;|&nbsp; B.E. Computer Science (Pursuing)</div>
+
+        <div class="contact-row">
+            📍 Davanagere, Karnataka
+            <span class="contact-sep">|</span>
+            📧 <a href="mailto:contact@adhi.is-a.dev">contact@adhi.is-a.dev</a>
+            <span class="contact-sep">|</span>
+            💼 <a href="https://linkedin.com/in/developeradhi" target="_blank">LinkedIn</a>
+            <span class="contact-sep">|</span>
+            💻 <a href="https://github.com/developeradhi" target="_blank">GitHub</a>
+            <span class="contact-sep">|</span>
+            🌐 <a href="https://bit.ly/4gYtWdZ" target="_blank">adhi.is-a.dev</a>
+        </div>
+
+        <div class="download-timestamp" id="dl-timestamp"></div>
+
+        <!-- PROFESSIONAL SUMMARY -->
+        <div class="section-heading">Professional Summary</div>
+        <p>
+            Detail-oriented and self-driven Computer Science undergraduate currently pursuing a B.E. at Bapuji Institute of Engineering and Technology (BIET), Davanagere. Demonstrated ability to independently architect and deploy production-grade web applications, including a School ERP system and a retail POS platform. Proficient in the modern JavaScript ecosystem (Next.js, React, Node.js) with hands-on expertise in relational databases (PostgreSQL, Prisma ORM) and cloud services (Supabase, Firebase, Vercel). Recognized by Google as a Developer Program Premium member with 9 developer badges. Open to new software engineering opportunities.
+        </p>
+
+        <!-- TECHNICAL SKILLS -->
+        <div class="section-heading">Technical Skills</div>
+        <table class="skills-table">
+            <tr>
+                <td>Programming Languages:</td>
+                <td>JavaScript (ES6+), Python, C++, HTML5, CSS3, SQL</td>
+            </tr>
+            <tr>
+                <td>Web Technologies:</td>
+                <td>Node.js, Express.js, REST APIs, JSON, DOM Manipulation</td>
+            </tr>
+            <tr>
+                <td>Frameworks:</td>
+                <td>Next.js, React, TailwindCSS</td>
+            </tr>
+            <tr>
+                <td>Databases:</td>
+                <td>PostgreSQL, Supabase, Prisma ORM, Firebase</td>
+            </tr>
+            <tr>
+                <td>Developer Tools:</td>
+                <td>Git, GitHub, VS Code, Vercel, Figma, GitHub Actions</td>
+            </tr>
+            <tr>
+                <td>Operating Systems:</td>
+                <td>Windows, Linux (Ubuntu)</td>
+            </tr>
+        </table>
+
+        <!-- EDUCATION -->
+        <div class="section-heading">Education</div>
+
+        <div class="entry-block">
+            <div class="entry-header">
+                <span class="entry-title">B.E. in Computer Science and Engineering (Pursuing)</span>
+                <span class="entry-date">2025 &ndash; 2029 (Expected)</span>
+            </div>
+            <div class="entry-org">Bapuji Institute of Engineering and Technology (BIET), Davanagere</div>
+            <p><strong>Relevant Coursework:</strong> Data Structures &amp; Algorithms, Web Technologies, Database Management Systems, Computer Networks, Object-Oriented Programming, Operating Systems.</p>
+        </div>
+
+        <div class="entry-block">
+            <div class="entry-header">
+                <span class="entry-title">Pre-University (PUC), Computer Science</span>
+                <span class="entry-date">2023 &ndash; 2025</span>
+            </div>
+            <div class="entry-org">Sir MV PU College, Davanagere</div>
+            <p>Developed foundational logic using C++, algebraic calculations, database concepts, and research methodology.</p>
+        </div>
+
+        <div class="entry-block">
+            <div class="entry-header">
+                <span class="entry-title">High School (SSLC), State Board</span>
+                <span class="entry-date">2023</span>
+            </div>
+            <div class="entry-org">Rural Public School</div>
+            <p>Completed secondary studies with a scholastic achievement grade of <strong>87.36%</strong>.</p>
+        </div>
+
+        <!-- CERTIFICATIONS -->
+        <div class="section-heading">Certifications</div>
+        <ul class="two-column-list">
+            <li>Intro to NLP &mdash; Infosys Springboard (May 2026)</li>
+            <li>Intro to Deep Learning &mdash; Infosys Springboard (May 2026)</li>
+            <li>Intro to AI &mdash; Infosys Springboard (May 2026)</li>
+            <li>Future of Full Stack: 2026 &mdash; HCL GUVI (May 2026)</li>
+            <li>Opticode 2.0 &mdash; BIET Davanagere (Apr 2026)</li>
+            <li>Prompt Engineering &mdash; Great Learning (Mar 2026)</li>
+            <li>CSS (Basic) &mdash; HackerRank (Mar 2026)</li>
+            <li>Python (Basic) &mdash; HackerRank (Mar 2026)</li>
+            <li>Acquiring Data &mdash; FutureSkills Prime (Mar 2026)</li>
+            <li>SQL (Advanced) &mdash; HackerRank (Jan 2026)</li>
+            <li>Quantum Computing &mdash; C-DAC (May 2025)</li>
+        </ul>
+
+        <div class="page-footer">Page 1 of 2</div>
+    </div>
+
+    <!-- 📄 PAGE 2 -->
+    <div class="resume-page" id="page-2">
+        <!-- PROJECTS -->
+        <div class="section-heading" style="margin-top: 0;">Projects</div>
+
+        <div class="entry-block">
+            <div class="entry-header">
+                <span class="entry-title">Sri Basaveswara School ERP</span>
+                <span class="entry-date">
+                    <a href="https://rootnode-rebels.github.io/sribasaveswaraschool" target="_blank">Live</a> &nbsp;|&nbsp; 
+                    <a href="https://github.com/RootNode-Rebels/sribasaveswaraschool" target="_blank">GitHub</a>
+                </span>
+            </div>
+            <p class="tech-line">Technologies: HTML5, CSS3, JavaScript, GitHub Workflows</p>
+            <ul>
+                <li>Developed a customized School Resource Planning application tailored for educational institutions.</li>
+                <li>Engineered automated workflows for student registration and record-keeping, reducing manual data entry overhead.</li>
+                <li>Designed visual analytics dashboards to track administrative metrics including enrollment and attendance.</li>
+                <li>Deployed live via GitHub Pages with continuous integration using GitHub Actions.</li>
+            </ul>
+        </div>
+
+        <div class="entry-block">
+            <div class="entry-header">
+                <span class="entry-title">SuperPOS Pro</span>
+                <span class="entry-date">
+                    <a href="https://smarttrolleyapp.vercel.app" target="_blank">Live</a> &nbsp;|&nbsp; 
+                    <a href="https://github.com/RootNode-Rebels/smarttrolleyapp" target="_blank">GitHub</a>
+                </span>
+            </div>
+            <p class="tech-line">Technologies: Next.js, React, TailwindCSS, Supabase (PostgreSQL), Prisma ORM</p>
+            <ul>
+                <li>Architected a high-performance Point of Sale (POS) and inventory management web application for retail businesses.</li>
+                <li>Implemented a secure admin dashboard featuring Role-Based Access Control (RBAC) and financial analytics.</li>
+                <li>Integrated a lightning-fast checkout terminal with dynamic UPI QR code generation and printable receipts.</li>
+                <li>Deployed on Vercel with production-grade performance optimization.</li>
+            </ul>
+        </div>
+
+        <div class="entry-block">
+            <div class="entry-header">
+                <span class="entry-title">Personal Portfolio &mdash; adhi.is-a.dev</span>
+                <span class="entry-date">
+                    <a href="https://bit.ly/4gYtWdZ" target="_blank">Live</a> &nbsp;|&nbsp; 
+                    <a href="https://github.com/developeradhi/adarsh-ui" target="_blank">GitHub</a>
+                </span>
+            </div>
+            <p class="tech-line">Technologies: HTML5, CSS3, Vanilla JavaScript, GitHub Pages</p>
+            <ul>
+                <li>Developed a high-performance portfolio with glassmorphism UI, custom CSS animations, and dynamic routing.</li>
+                <li>Configured custom DNS mapping, automated deployments via GitHub Actions, and Zoho Mail MX integrations.</li>
+                <li>Integrated Google Analytics event tracking to monitor professional engagement and resume downloads.</li>
+                <li>Built with SEO best practices including structured meta tags, sitemap.xml, and robots.txt.</li>
+            </ul>
+        </div>
+
+        <!-- ACHIEVEMENTS -->
+        <div class="section-heading">Achievements</div>
+        <ul class="two-column-list">
+            <li>Selected for Google Developer Program Premium membership with 9 verified developer badges (Feb 2026).</li>
+            <li>Earned Gemini Enterprise Agent Ready, Firebase Studio Developer, and Google Cloud Innovator badges.</li>
+            <li>Recognized as Google Maps Platform Innovator, Android Studio User, and GDG Discovery member.</li>
+            <li>Active member of Google Cloud &amp; NVIDIA Community with open-source contributions on GitHub.</li>
+            <li>Scored 87.36% in SSLC (State Board) examinations.</li>
+        </ul>
+
+        <!-- EXTRACURRICULAR ACTIVITIES -->
+        <div class="section-heading">Extracurricular Activities</div>
+        <ul>
+            <li>Active member of the Google Developer Group (GDG) Discovery community (Feb 2026).</li>
+            <li>Enrolled in the Google Developer Program Premium tier, engaging with Google Cloud and AI/ML developer events.</li>
+            <li>Participant in the Google Cloud &amp; NVIDIA Community for cloud-native and AI learning initiatives.</li>
+            <li>Participated in Opticode 2.0 — a national-level coding competition hosted by BIET Davanagere (Apr 2026).</li>
+        </ul>
+
+        <!-- LANGUAGES & INTERESTS (Side-by-Side) -->
+        <div style="display: flex; gap: 24px; margin-bottom: 5pt;">
+            <div style="flex: 1;">
+                <div class="section-heading">Languages</div>
+                <p>Kannada (Native) &nbsp;|&nbsp; English &nbsp;|&nbsp; Hindi</p>
+            </div>
+            <div style="flex: 1;">
+                <div class="section-heading">Interests</div>
+                <p>Full-Stack Web, UI/UX, Cloud, AI/ML</p>
+            </div>
+        </div>
+
+        <!-- DECLARATION -->
+        <div class="section-heading">Declaration</div>
+        <p>I hereby declare that all the information furnished above is true, complete, and correct to the best of my knowledge and belief.</p>
+        
+        <div style="display:flex; justify-content:space-between; margin-top:8pt;">
+            <div>
+                <p><strong>Place:</strong> Davanagere</p>
+                <p><strong>Date:</strong> <span id="decl-date"></span></p>
+            </div>
+            <div style="text-align:right;">
+                <br>
+                <p><strong>Adarsh B A</strong></p>
+            </div>
+        </div>
+
+        <div class="page-footer">Page 2 of 2</div>
+    </div>
+
+    <script>
+        // Auto-fill today's date in the declaration
+        const today = new Date();
+        const formatted = today.toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' });
+        const declDate = document.getElementById('decl-date');
+        if (declDate) declDate.textContent = formatted;
+
+        // Stamp the download timestamp at the top of the resume
+        const ts = document.getElementById('dl-timestamp');
+        if (ts) {
+            const fullStamp = today.toLocaleString('en-IN', {
+                day: '2-digit', month: 'long', year: 'numeric',
+                hour: '2-digit', minute: '2-digit', hour12: true
+            });
+            ts.textContent = 'Downloaded on ' + fullStamp + ' IST';
+        }
+
+        // Trigger print dynamically if the page is opened for downloading
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('download') === 'true') {
+            if (document.readyState === 'complete') {
+                setTimeout(() => window.print(), 500);
+            } else {
+                window.addEventListener('load', () => {
+                    setTimeout(() => window.print(), 500);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

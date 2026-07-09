@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Adarsh B A">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share Feedback | Adarsh B A</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            background: var(--bg-color);
+        }
+        .rating-content {
+            opacity: 1 !important;
+            transform: none !important;
+            pointer-events: all !important;
+            margin: 0 auto;
+            position: relative;
+        }
+        .back-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            color: var(--text-muted);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            transition: var(--transition-fast);
+        }
+        .back-link:hover {
+            color: var(--accent-indigo);
+        }
+    </style>
+</head>
+<body class="dark-theme">
+    
+    <div class="rating-content glass">
+        <a href="index.html" class="back-link"><i data-feather="arrow-left" style="width: 16px; height: 16px;"></i> Back to Portfolio</a>
+        <div class="rating-body" id="rating-body-content">
+            <h3>Share Feedback</h3>
+            <p>Your feedback fuels the engine.</p>
+            <form id="rating-form" class="rating-form">
+                <input type="hidden" name="form_type" value="portfolio_rating">
+                <input type="hidden" name="subject" value="New Portfolio Rating!">
+                <input type="hidden" name="rating_score" id="rating-score-input" value="0">
+                <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+
+                <input type="text" name="name" class="form-input rating-email-input" placeholder="Your Name (Optional)" maxlength="100" style="margin-bottom: 1rem;">
+                <input type="email" name="email" class="form-input rating-email-input" placeholder="Your Email (Optional)" maxlength="150" style="margin-bottom: 1rem;">
+                <textarea name="feedback" class="form-input rating-textarea" placeholder="Leave a review or comment... (Optional)" maxlength="2000" style="margin-bottom: 1.5rem;"></textarea>
+
+                <div class="star-rating">
+                    <i data-feather="star" class="rating-star" data-value="1"></i>
+                    <i data-feather="star" class="rating-star" data-value="2"></i>
+                    <i data-feather="star" class="rating-star" data-value="3"></i>
+                    <i data-feather="star" class="rating-star" data-value="4"></i>
+                    <i data-feather="star" class="rating-star" data-value="5"></i>
+                </div>
+                
+                <button type="submit" class="btn-action solid rating-submit-btn" disabled>Submit Rating</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        feather.replace();
+    </script>
+</body>
+</html>

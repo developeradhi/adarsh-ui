@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adarsh B A | Full-Stack Engineer · Next.js · React · PostgreSQL</title>
+    <meta name="description" content="Portfolio of Adarsh B A — Full-Stack Engineer from India. Building ERP systems, POS platforms &amp; web apps with Next.js, React, Supabase and PostgreSQL.">
+    <meta name="keywords" content="Adarsh B A, Full Stack Developer, Software Engineer, Next.js Developer, React Developer, BIET Davanagere, Web Developer India, Portfolio, adhi.is-a.dev">
+    <meta name="author" content="Adarsh B A">
+    <link rel="canonical" href="https://adhi.is-a.dev/">
+    <meta name="theme-color" content="#070709">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <!-- ── Open Graph (LinkedIn, WhatsApp, Discord, Telegram, Facebook) ── -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://adhi.is-a.dev/">
+    <meta property="og:site_name" content="Adarsh B A | Portfolio">
+    <meta property="og:title" content="Adarsh B A · Full-Stack Engineer">
+    <meta property="og:description" content="Full-Stack engineer building ERP systems, POS platforms &amp; modern web apps. Open for internships &amp; collaborations.">
+    <meta property="og:image" content="https://developeradhi.github.io/adarsh-ui/preview.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Adarsh B A — Full-Stack Software Engineer Portfolio">
+    <meta property="og:locale" content="en_IN">
+
+    <!-- ── Twitter / X Card ── -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@itzz__adhi">
+    <meta name="twitter:creator" content="@itzz__adhi">
+    <meta name="twitter:title" content="Adarsh B A · Full-Stack Engineer">
+    <meta name="twitter:description" content="Self-driven engineer building scalable ERP systems, POS platforms &amp; modern web apps. Open for internships &amp; collaborations.">
+    <meta name="twitter:image" content="https://developeradhi.github.io/adarsh-ui/preview.png">
+    <meta name="twitter:image:alt" content="Adarsh B A Portfolio Preview">
+
+    <!-- ── Favicon & App Icons ── -->
+    <link rel="icon" type="image/svg+xml" href="logo.svg">
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="shortcut icon" href="logo.svg">
+
+    <!-- Google Fonts: Plus Jakarta Sans (SaaS UI), Fira Code (Monospace) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4CX5D140CK"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-4CX5D140CK');
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <!-- Phase 3: Ecosystem Sync Libraries -->
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <!-- SEO: Schema.org Structured Data (Knowledge Graph) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Adarsh B A",
+      "url": "https://adhi.is-a.dev",
+      "jobTitle": "Full-Stack Software Engineer",
+      "description": "Computer Science undergraduate at BIET Davanagere. Full-Stack engineer building ERP systems, POS platforms & modern web apps.",
+      "sameAs": [
+        "https://github.com/developeradhi",
+        "https://linkedin.com/in/developeradhi",
+        "https://twitter.com/itzz__adhi",
+        "https://instagram.com/itzz__adhi",
+        "https://www.reddit.com/user/am2206",
+        "https://opentalents.in/adarsh-b-a"
+      ],
+      "founder": {
+        "@type": "Organization",
+        "name": "RootNode Rebels",
+        "url": "https://www.github.com/orgs/RootNode-Rebels/"
+      },
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "Bapuji Institute of Engineering and Technology (BIET)"
+      }
+    }
+    </script>
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-inner">
+            <div class="preloader-name">Adarsh B A</div>
+            <div class="preloader-bar"><div class="preloader-bar-fill"></div></div>
+        </div>
+    </div>
+
+    <!-- Cursor Spotlight -->
+    <div class="cursor-spotlight" id="cursor-spotlight"></div>
+
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scroll-progress"></div>
+
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay"></div>
+
+    <!-- Background Radial Ambient Glow -->
+    <div class="background-radial"></div>
+    <canvas id="ambient-canvas"></canvas>
+
+    <!-- Navigation Header -->
+    <nav class="navbar glass">
+        <a href="#" class="nav-logo">Adarsh B A</a>
+        <div class="nav-links-wrapper">
+            <a href="#home" class="nav-link active">Home</a>
+            <a href="#projects" class="nav-link">Projects</a>
+            <a href="#skills" class="nav-link">Skills</a>
+            <a href="#credentials" class="nav-link">Certifications</a>
+            <a href="#narrative" class="nav-link">Narrative</a>
+            <a href="#connect" class="nav-link">Contact</a>
+            <a href="#lab" class="nav-link">Hardware & AI Lab</a>
+            <a href="fdbk.html" class="nav-link">Share Feedback</a>
+            <a href="https://blog.adhi.is-a.dev" class="nav-link blog-link" target="_blank">Blog <span class="coming-soon-badge">Soon</span></a>
+        </div>
+        <div class="nav-actions">
+            <button class="theme-btn" id="theme-toggle" aria-label="Toggle Theme">
+                <i data-feather="moon" class="theme-icon"></i>
+            </button>
+            <a href="#connect" class="nav-btn">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Main Content Flow -->
+    <main class="main-container">
+        
+        <!-- SECTION 1: HERO -->
+        <section id="home" class="hero-section">
+            
+            <div class="availability-badge fade-in">
+                <span class="pulse-dot"></span>
+                Available for Opportunities
+            </div>
+
+            <h1 class="hero-title fade-in">
+                Adarsh B A<br>
+                <span id="typewriter-text" class="gradient-text"></span><span class="typewriter-cursor"></span>
+            </h1>
+            
+            <p class="hero-description fade-in">
+                Pursuing BE in Computer Engineering at Bapuji Institute of Engineering and Technology (BIET). Dedicated to engineering responsive client-side applications, modular API backends, and high-performance database systems.
+            </p>
+            
+            <div class="hero-cta fade-in">
+                <a href="#projects" class="btn btn-primary">Selected Projects</a>
+                <a href="#connect" class="btn btn-secondary">Connect Comms</a>
+                <a href="#" class="btn btn-resume" onclick="trackResumeDownload(event)"><i data-feather="file-text"></i> Download Resume</a>
+            </div>
+
+            <!-- Achievement Counters -->
+            <div class="achievement-grid fade-in">
+                <div class="achievement-box glass">
+                    <h3 class="counter" data-target="4">0</h3>
+                    <span>Projects Built</span>
+                </div>
+                <div class="achievement-box glass">
+                    <h3 class="counter" data-target="4">0</h3>
+                    <span>Certifications</span>
+                </div>
+                <div class="achievement-box glass">
+                    <h3 class="counter" data-target="9">0</h3>
+                    <span>Badges Earned</span>
+                </div>
+                <div class="achievement-box glass">
+                    <h3 class="counter" data-target="0">0</h3>
+                    <span>GitHub Commits (Add Yours)</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: PROJECTS -->
+        <section id="projects" class="section">
+            <div class="section-header fade-in">
+                <span class="section-label">[01 / deployments]</span>
+                <h2 class="section-title">Selected Projects</h2>
+            </div>
+
+            <!-- ERP Card (Large Case Study) -->
+            <div class="featured-project-card glass fade-in" onclick="openProjectDetails('erp')" style="cursor: pointer;">
+                <div class="project-info">
+                    <span class="project-num">01 / FEATURED SYSTEM (CLICK FOR DETAILS)</span>
+                    <h3 class="project-title">Sri Basaveswara School ERP</h3>
+                    <p class="project-desc">
+                        A customized School Resource Planning application built for educational institutions. Designed to automate student registration data, maintain visual analytics dashboards, and provide scalable administrative record-keeping.
+                    </p>
+                    <div class="project-tags">
+                        <span>HTML5/CSS3</span>
+                        <span>JavaScript</span>
+                        <span>GitHub Workflows</span>
+                    </div>
+                    <div class="project-actions">
+                        <a href="https://github.com/RootNode-Rebels/sribasaveswaraschool" target="_blank" class="btn-action"><i data-feather="github"></i> Repository</a>
+                        <a href="https://rootnode-rebels.github.io/sribasaveswaraschool" target="_blank" class="btn-action solid"><i data-feather="external-link"></i> Launch Live</a>
+                    </div>
+                </div>
+                <div class="project-visual">
+                    <div class="mock-dashboard">
+                        <!-- Dashboard window header controls -->
+                        <div class="dash-header">
+                            <div class="dash-dots">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                            <div class="dash-search-bar">sribasaveswaraschool.edu/admin/dashboard</div>
+                        </div>
+                        
+                        <!-- Dashboard interior grid -->
+                        <div class="dash-body">
+                            <!-- Left Mini Sidebar -->
+                            <div class="dash-sidebar">
+                                <div class="sidebar-item active"><i data-feather="grid"></i></div>
+                                <div class="sidebar-item"><i data-feather="users"></i></div>
+                                <div class="sidebar-item"><i data-feather="book-open"></i></div>
+                                <div class="sidebar-item"><i data-feather="bar-chart-2"></i></div>
+                                <div class="sidebar-item"><i data-feather="settings"></i></div>
+                            </div>
+                            
+                            <!-- Main Panel Workspace -->
+                            <div class="dash-panel">
+                                <div class="panel-header">
+                                    <h5>Overview Analytics</h5>
+                                    <span class="panel-date">Real-time</span>
+                                </div>
+                                
+                                <!-- Mini Metrics cards -->
+                                <div class="panel-metrics">
+                                    <div class="panel-metric-card">
+                                        <span class="metric-label">Students</span>
+                                        <span class="metric-value">1,248</span>
+                                        <span class="metric-trend positive">+8%</span>
+                                    </div>
+                                    <div class="panel-metric-card">
+                                        <span class="metric-label">Attendance</span>
+                                        <span class="metric-value">94.2%</span>
+                                        <span class="metric-trend positive">Stable</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Analytical visual bars chart representation -->
+                                <div class="panel-chart-container">
+                                    <span class="chart-title">Class Grade Enrollment Distribution</span>
+                                    <div class="dash-content">
+                                        <div class="dash-block-wrapper">
+                                            <div class="dash-block blue"></div>
+                                            <span class="bar-label">G1-5</span>
+                                        </div>
+                                        <div class="dash-block-wrapper">
+                                            <div class="dash-block purple"></div>
+                                            <span class="bar-label">G6-8</span>
+                                        </div>
+                                        <div class="dash-block-wrapper">
+                                            <div class="dash-block orange"></div>
+                                            <span class="bar-label">G9-10</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SuperPOS Pro Card (Featured) -->
+            <div class="featured-project-card glass fade-in" onclick="openProjectDetails('superpos')" style="cursor: pointer; margin-top: 3rem;">
+                <div class="project-info">
+                    <span class="project-num">02 / FEATURED RETAIL APP (CLICK FOR DETAILS)</span>
+                    <h3 class="project-title">SuperPOS Pro</h3>
+                    <p class="project-desc">
+                        A high-performance Point of Sale (POS) and inventory management web application. Features a lightning-fast checkout terminal with dynamic UPI QR code generation, printable receipts, and a secure admin dashboard with role-based access control (RBAC) and financial analytics.
+                    </p>
+                    <div class="project-tags">
+                        <span>Next.js</span>
+                        <span>React</span>
+                        <span>TailwindCSS</span>
+                        <span>Supabase</span>
+                        <span>Prisma</span>
+                    </div>
+                    <div class="project-actions" style="margin-top: 1.5rem;">
+                        <a href="https://github.com/RootNode-Rebels/smarttrolleyapp" target="_blank" class="btn-action"><i data-feather="github"></i> Repository</a>
+                        <a href="https://smarttrolleyapp.vercel.app" target="_blank" class="btn-action solid"><i data-feather="external-link"></i> Live Demo</a>
+                    </div>
+                </div>
+                <div class="project-visual">
+                    <div class="mock-dashboard" style="background: rgba(13, 13, 20, 0.4);">
+                        <div class="dash-header">
+                            <div class="dash-dots">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                            <div class="dash-search-bar">smarttrolleyapp.vercel.app/admin/pos</div>
+                        </div>
+                        <div class="dash-body">
+                            <div class="dash-sidebar" style="width: 25%;"></div>
+                            <div class="dash-content">
+                                <div class="dash-block" style="width: 100%; height: 120px;"></div>
+                                <div class="dash-block" style="width: 60%; height: 80px;"></div>
+                                <div class="dash-block" style="width: 35%; height: 80px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other Projects Grid -->
+            <div class="projects-grid">
+                <div class="project-card glass fade-in" style="display: flex; align-items: center; justify-content: center; text-align: center; padding: 4rem 2rem; grid-column: 1 / -1;">
+                    <div>
+                        <i data-feather="cpu" style="width: 32px; height: 32px; margin-bottom: 1rem; color: var(--accent-indigo);"></i>
+                        <h4 style="margin-top: 0;">More Projects in Development</h4>
+                        <p style="margin-bottom: 0;">Currently architecting new solutions. Check back soon for updates!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2.5: CONSISTENCY METRICS -->
+        <section id="metrics" class="section">
+            <div class="section-header fade-in">
+                <span class="section-label">[01.5 / developer stats]</span>
+                <h2 class="section-title">Consistency Metrics</h2>
+            </div>
+            
+            <div class="metrics-bento fade-in">
+                <div class="bento-box glass github-heatmap-box">
+                    <div class="bento-header">
+                        <i data-feather="github"></i>
+                        <h4>GitHub Contributions</h4>
+                    </div>
+                    <div class="heatmap-wrapper">
+                        <!-- Ghchart to auto-pull live graph (Replace 'developeradhi' with real username) -->
+                        <img src="https://ghchart.rshah.org/10b981/developeradhi" alt="GitHub Activity Graph" />
+                    </div>
+                </div>
+                
+                <div class="bento-box glass coding-profile-box">
+                    <div class="bento-header">
+                        <i data-feather="code"></i>
+                        <h4>Coding Profiles</h4>
+                    </div>
+                    <div class="profiles-list">
+                        <div class="profile-item">
+                            <span class="profile-name">HackerRank</span>
+                            <span class="profile-stat"><span style="color:var(--accent-emerald);">&#9733;</span> CSS Basic &bull; Python Basic &bull; SQL Advanced</span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="profile-name">LeetCode</span>
+                            <span class="profile-stat">Profile Active</span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="profile-name">GeeksforGeeks</span>
+                            <span class="profile-stat">Profile Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: SKILLS / CAPABILITIES -->
+        <section id="skills" class="section">
+            <div class="section-header fade-in">
+                <span class="section-label">[02 / capabilities]</span>
+                <h2 class="section-title">Core Expertise</h2>
+                <div class="skills-filter-wrapper">
+                    <button class="filter-btn active" data-filter="all">All Specs</button>
+                    <button class="filter-btn" data-filter="languages">Languages</button>
+                    <button class="filter-btn" data-filter="platforms">Frameworks & DB</button>
+                    <button class="filter-btn" data-filter="areas">Focus Areas</button>
+                </div>
+            </div>
+
+            <div class="skills-grid">
+                <!-- Focus Areas -->
+                <div class="skills-card glass fade-in" data-skill-group="areas">
+                    <h3 class="card-title"><i data-feather="cpu" class="card-icon"></i> Core Capabilities</h3>
+                    <p class="card-desc">Specialized engineering areas that bridge front-end aesthetics with robust, secure back-ends.</p>
+                    <div class="skills-pills">
+                        <span data-skill="areas">Full-Stack Architecture</span>
+                        <span data-skill="areas">Point of Sale (POS) Systems</span>
+                        <span data-skill="areas">Role-Based Access Control</span>
+                        <span data-skill="areas">Database Modeling</span>
+                        <span data-skill="areas">API Integrations</span>
+                    </div>
+                </div>
+
+                <!-- Languages & Tools -->
+                <div class="skills-card glass fade-in" data-skill-group="tech">
+                    <h3 class="card-title"><i data-feather="terminal" class="card-icon"></i> Tech Stack</h3>
+                    <p class="card-desc">Modern frameworks, cloud databases, and continuous integration workflows.</p>
+                    <div class="skills-pills-alt">
+                        <span data-skill="platforms">Next.js</span>
+                        <span data-skill="platforms">React</span>
+                        <span data-skill="platforms">TailwindCSS</span>
+                        <span data-skill="platforms">Supabase (PostgreSQL)</span>
+                        <span data-skill="platforms">Prisma ORM</span>
+                        <span data-skill="platforms">Firebase</span>
+                        <span data-skill="languages">JavaScript (ES6+)</span>
+                        <span data-skill="languages">HTML5 / CSS3</span>
+                        <span data-skill="languages">Python / C++</span>
+                        <span data-skill="platforms">Git / Vercel</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: CERTIFICATIONS -->
+        <section id="credentials" class="section">
+            <div class="section-header fade-in">
+                <span class="section-label">[03 / verifications]</span>
+                <h2 class="section-title">Licenses & Certifications</h2>
+            </div>
+
+            <div class="credentials-table glass fade-in">
+                <!-- Cert 1 (New) -->
+                <div class="cred-row">
+                    <span class="cred-issuer">Jajula Connects</span>
+                    <div class="cred-details">
+                        <h4>Certificate For Participation (Web Hackathon)</h4>
+                        <span class="meta">Credential ID: RACE-2026-04 &mdash; Jun 2026</span>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1E6xOiIUI3Krz8CVIHIj1nSBikmoOMSPL/view" target="_blank" class="verify-btn"><i data-feather="external-link"></i> Verify</a>
+                </div>
+
+                <!-- Cert 2 (New) -->
+                <div class="cred-row">
+                    <span class="cred-issuer">Google</span>
+                    <div class="cred-details">
+                        <h4>Gemini Enterprise Application</h4>
+                        <span class="meta">Credential ID: 1af11215-765f-4ff2-8f75-109f0bf43217 &mdash; Jun 2026</span>
+                    </div>
+                    <a href="https://www.credly.com/badges/1af11215-765f-4ff2-8f75-109f0bf43217" target="_blank" class="verify-btn"><i data-feather="external-link"></i> Verify</a>
+                </div>
+
+                <!-- Cert 3 (New) -->
+                <div class="cred-row">
+                    <span class="cred-issuer">IEEE</span>
+                    <div class="cred-details">
+                        <h4>Certificate of Participation in WebForge - A Smart Campus Webathon</h4>
+                        <span class="meta">Credential ID: 01ad9107-14ba-4a47-88e9-de8be273fa9d &mdash; Jun 2026</span>
+                    </div>
+                    <a href="https://unstop.com/certificate-preview/54ed6f07-14ba-4dd7-93b5-dd9ba073fe8d" target="_blank" class="verify-btn"><i data-feather="external-link"></i> Verify</a>
+                </div>
+
+                <!-- Cert 4 (New) -->
+                <div class="cred-row">
+                    <span class="cred-issuer">Infosys Springboard</span>
+                    <div class="cred-details">
+                        <h4>Artificial Intelligence Foundation Certification</h4>
+                        <span class="meta">Jun 2026</span>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1iO947sxPtv2LC0wk6RSweVtHBA_yW6L2/view" target="_blank" class="verify-btn"><i data-feather="external-link"></i> Verify</a>
+                </div>
+
+                <!-- Cert 1 -->
+                <div class="cred-row">
+                    <span class="cred-issuer">Infosys Springboard</span>
+                    <div class="cred-details">
+                        <h4>Introduction to Natural Language Processing</h4>
+                        <span class="meta">May 2026</span>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1UNs2HRxjyggYM0MdqOM1zAewNbiN1O_X/view" target="_blank" class="verify-btn"><i data-feather="external-link"></i> Verify</a>
+                </div>
+
+                <!-- Cert 2 -->
+                <div class="cred-row">
+                    <span class="cred-issuer">Infosys Springboard</span>
+                    <div class="cred-details">
+                        <h4>Introduction To Deep Learning</h4>
+                        <span class="meta">May 2026</span>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1PD3J_AoCp-pYNcKQjJkohHdqnvgKTN7Z/view" target="_blank" class="verify-btn"><i data-feather="external-link"></i> Verify</a>
+                </div>
+
+                <!-- Cert 3 -->
+                <div class="cred-row">
+                    <span class="cred-issuer">Infosys Springboard</span>
+                    <div class="cred-details">
+                        <h4>Introduction to Artificial Intelligence</h4>
+                        <span class="meta">May 2026</span>
+                    </div>
+                    <a href="https://drive.google.com/file/d/12GUWhCFrUKB11WoYFzemcArXKvalSL-p/view" target="_blank" class="verify-btn"><i data-feather="external-link"></i> Verify</a>
+                </div>
+
+                <!-- Cert 4 -->
+                <div class="cred-row">
+                    <span class="cred-issuer">HCL GUVI</span>
+                    <div class="cred-details">
+                        <h4>The Future of Full Stack Development Key Skills Needed in 2026</h4>
+                        <span class="meta">Credential ID: 6T3771Q898xy98V4gM &mdash; May 2026</span>
+                    </div>
+                    <a href="https://www.guvi.in/verify-certificate?id=6T3771Q898xy98V4gM" target="_blank" class="verify-btn"><i data-feather="external-link"></i> Verify</a>
+                </div>
+
+                <!-- Cert 5 -->
+                <div class="cred-row">
+                    <span class="cred-issuer">BIET Davanagere</span>
+                    <div class="cred-details">
+                        <h4>Opticode 2.0</h4>
+                        <span class="meta">Credential ID: BIET/OPTICODE-2.0/01 &mdash; Apr 2026</span>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1RCh9w5jV6fQKxYmlCbvl83HzZDicxJNp/view" target="_blank" class="verify-btn"><i data-feather="external-link"></i> Verify</a>
+                </div>
+
+                <!-- Cert 6 -->
+                <div class="cred-row">
+                    <span class="cred-issuer">Great Learning</span>
+                    <div class="cred-details">
+                        <h4>Prompt Engineering</h4>
+                        <span class="meta">Credential ID: LOQONMDG &mdash; Mar 2026</span>
+                    </div>
+                    <a href="https://www.mygreatlearning.com/certificate/LOQONMDG" target="_blank" class="verify-btn"><i data-feather="external-link"></i> Verify</a>
+                </div>
+
+                <!-- Cert 7 -->
+                <div class="cred-row">
+                    <span class="cred-issuer">HackerRank</span>
+                    <div class="cred-details">
+                        <h4>CSS (Basic)</h4>
+                        <span class="meta">Credential ID: dab34525d7ec &mdash; Mar 2026</span>
+                    </div>
+                    <a href="https://www.hackerrank.com/certificates/dab34525d7ec" target="_blank" class="verify-btn"><i data-feather="external-link"></i> Verify</a>
+                </div>
+
+                <!-- Cert 8 -->
+                <div class="cred-row">
+                    <span class="cred-issuer">HackerRank</span>
+                    <div class="cred-details">
+                        <h4>Python (Basic)</h4>
+                        <span class="meta">Credential ID: 3354caff0523 &mdash; Mar 2026</span>
+                    </div>
+                    <a href="https://www.hackerrank.com/certificates/3354caff0523" target="_blank" class="verify-btn"><i data-feather="external-link"></i> Verify</a>
+                </div>
+
+                <!-- Cert 9 -->
+                <div class="cred-row">
+                    <span class="cred-issuer">C-DAC</span>
+                    <div class="cred-details">
+                        <h4>Quantum Computing</h4>
+                        <span class="meta">Credential ID: CDACH/QML/2584 &mdash; May 2025</span>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1JcxXwK70pGpKnlApvGbOfPYJVVNcywjk/view" target="_blank" class="verify-btn"><i data-feather="external-link"></i> Verify</a>
+                </div>
+
+                <!-- Cert 10 -->
+                <div class="cred-row">
+                    <span class="cred-issuer">FutureSkills Prime</span>
+                    <div class="cred-details">
+                        <h4>Acquiring Data</h4>
+                        <span class="meta">Credential ID: 65084736-74256-455465-3 &mdash; Mar 2026</span>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1LHz-QlXY2IrpKK4WSNDbJJBH5oa1s2A9/view" target="_blank" class="verify-btn"><i data-feather="external-link"></i> Verify</a>
+                </div>
+
+                <!-- Cert 11 -->
+                <div class="cred-row">
+                    <span class="cred-issuer">HackerRank</span>
+                    <div class="cred-details">
+                        <h4>SQL (Advanced)</h4>
+                        <span class="meta">Credential ID: ef1cc56efc08 &mdash; Jan 2026</span>
+                    </div>
+                    <a href="https://www.hackerrank.com/certificates/ef1cc56efc08" target="_blank" class="verify-btn"><i data-feather="external-link"></i> Verify</a>
+                </div>
+            </div>
+
+            <div class="section-header fade-in" style="margin-top: 5rem;">
+                <span class="section-label">[03.5 / google developers]</span>
+                <h2 class="section-title">Developer Badges</h2>
+            </div>
+
+            <div class="badges-grid">
+                <!-- Badge 1 -->
+                <div class="badge-card glass fade-in">
+                    <div class="badge-icon-wrapper" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3);"><i data-feather="cpu" style="color: #10b981;"></i></div>
+                    <div class="badge-info">
+                        <h4>Gemini Enterprise Agent Ready</h4>
+                        <span class="badge-date">Feb 11, 2026</span>
+                    </div>
+                </div>
+                <!-- Badge 2 -->
+                <div class="badge-card glass fade-in">
+                    <div class="badge-icon-wrapper" style="background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.3);"><i data-feather="map" style="color: #3b82f6;"></i></div>
+                    <div class="badge-info">
+                        <h4>Google Maps Platform Innovators</h4>
+                        <span class="badge-date">Feb 3, 2026</span>
+                    </div>
+                </div>
+                <!-- Badge 3 -->
+                <div class="badge-card glass fade-in">
+                    <div class="badge-icon-wrapper" style="background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3);"><i data-feather="database" style="color: #f59e0b;"></i></div>
+                    <div class="badge-info">
+                        <h4>Firebase Studio Developer</h4>
+                        <span class="badge-date">Feb 3, 2026</span>
+                    </div>
+                </div>
+                <!-- Badge 4 -->
+                <div class="badge-card glass fade-in">
+                    <div class="badge-icon-wrapper" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3);"><i data-feather="smartphone" style="color: #10b981;"></i></div>
+                    <div class="badge-info">
+                        <h4>Android Studio User</h4>
+                        <span class="badge-date">Feb 3, 2026</span>
+                    </div>
+                </div>
+                <!-- Badge 5 -->
+                <div class="badge-card glass fade-in">
+                    <div class="badge-icon-wrapper" style="background: rgba(99, 102, 241, 0.1); border-color: rgba(99, 102, 241, 0.3);"><i data-feather="award" style="color: #6366f1;"></i></div>
+                    <div class="badge-info">
+                        <h4>Get Certified Application</h4>
+                        <span class="badge-date">Feb 11, 2026</span>
+                    </div>
+                </div>
+                <!-- Badge 6 -->
+                <div class="badge-card glass fade-in">
+                    <div class="badge-icon-wrapper" style="background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3);"><i data-feather="users" style="color: #ef4444;"></i></div>
+                    <div class="badge-info">
+                        <h4>Google Developer Group Discovery</h4>
+                        <span class="badge-date">Feb 3, 2026</span>
+                    </div>
+                </div>
+                <!-- Badge 7 -->
+                <div class="badge-card glass fade-in">
+                    <div class="badge-icon-wrapper" style="background: rgba(34, 197, 94, 0.1); border-color: rgba(34, 197, 94, 0.3);"><i data-feather="monitor" style="color: #22c55e;"></i></div>
+                    <div class="badge-info">
+                        <h4>Google Cloud & NVIDIA Community</h4>
+                        <span class="badge-date">Feb 3, 2026</span>
+                    </div>
+                </div>
+                <!-- Badge 8 -->
+                <div class="badge-card glass fade-in">
+                    <div class="badge-icon-wrapper" style="background: rgba(234, 179, 8, 0.1); border-color: rgba(234, 179, 8, 0.3);"><i data-feather="star" style="color: #eab308;"></i></div>
+                    <div class="badge-info">
+                        <h4>Google Developer Program Premium</h4>
+                        <span class="badge-date">Feb 3, 2026</span>
+                    </div>
+                </div>
+                <!-- Badge 9 -->
+                <div class="badge-card glass fade-in">
+                    <div class="badge-icon-wrapper" style="background: rgba(14, 165, 233, 0.1); border-color: rgba(14, 165, 233, 0.3);"><i data-feather="cloud" style="color: #0ea5e9;"></i></div>
+                    <div class="badge-info">
+                        <h4>Google Cloud Innovator</h4>
+                        <span class="badge-date">Aug 20, 2025</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: DEVELOPER JOURNEY TIMELINE -->
+        <section id="narrative" class="section">
+            <div class="section-header fade-in">
+                <span class="section-label">[04 / history]</span>
+                <h2 class="section-title">Developer Journey</h2>
+            </div>
+
+            <div class="journey-timeline">
+                <div class="journey-node fade-in">
+                    <div class="journey-year" style="font-size: 1.2rem; text-align: right;">2025-2029<br><span style="font-size: 0.8rem; opacity: 0.7;">(expected)</span></div>
+                    <div class="journey-content glass">
+                        <h3>Bapuji Institute of Engineering & Technology (BIET)</h3>
+                        <p style="color:var(--accent-cyan); font-family:var(--font-mono); font-size:0.8rem; margin-bottom:0.5rem;">Bachelor of Engineering &mdash; BE, Computer Engineering (Pursuing)</p>
+                        <p>Focussing on algorithms, data processing structures, object-oriented system engineering, and continuous professional development.</p>
+                    </div>
+                </div>
+
+                <div class="journey-node fade-in">
+                    <div class="journey-year">2023-2025</div>
+                    <div class="journey-content glass">
+                        <h3>Sir MV PU College Davanagere</h3>
+                        <p style="color:var(--accent-cyan); font-family:var(--font-mono); font-size:0.8rem; margin-bottom:0.5rem;">Pre University, Computer Science</p>
+                        <p>Developed solid foundational logic using C++, algebraic calculations, database concepts, and research logic.</p>
+                    </div>
+                </div>
+
+                <div class="journey-node fade-in">
+                    <div class="journey-year">2023</div>
+                    <div class="journey-content glass">
+                        <h3>Rural Public School</h3>
+                        <p style="color:var(--accent-cyan); font-family:var(--font-mono); font-size:0.8rem; margin-bottom:0.5rem;">High School (10th Standard / SSLC)</p>
+                        <p>Completed secondary standard studies with a verified scholastic achievement grade of <strong>87.36%</strong>.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: LANGUAGES -->
+        <section class="section">
+            <div class="section-header fade-in">
+                <span class="section-label">[05 / languages]</span>
+                <h2 class="section-title">Linguistic Profile</h2>
+            </div>
+            <div class="languages-grid">
+                <div class="lang-card glass fade-in">
+                    <h3>Kannada</h3>
+                    <p class="lang-prof">Native or Bilingual Proficiency</p>
+                </div>
+                <div class="lang-card glass fade-in">
+                    <h3>English</h3>
+                    <p class="lang-prof">Limited Working Proficiency</p>
+                </div>
+                <div class="lang-card glass fade-in">
+                    <h3>Hindi</h3>
+                    <p class="lang-prof">Limited Working Proficiency</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6.5: HARDWARE & AI LAB (PHASE 3) -->
+        <section id="lab" class="section">
+            <div class="section-header fade-in">
+                <span class="section-label">[06 / experimental]</span>
+                <h2 class="section-title">Hardware & AI Lab</h2>
+                <p style="color: var(--text-secondary); max-width: 600px; margin-top: 1rem;">Testing the absolute limits of the modern browser using native Web APIs. No backend required.</p>
+            </div>
+
+            <div class="lab-grid fade-in">
+                <!-- Feature B: Neural Net -->
+                <div class="lab-card glass">
+                    <div class="lab-header"><i data-feather="cpu"></i> Neural Core</div>
+                    <canvas id="neural-canvas" style="width:100%; height:150px; background:rgba(0,0,0,0.5); border-radius:8px; margin-bottom:1rem;"></canvas>
+                    <button class="btn-action solid" id="train-ai-btn">Train Model</button>
+                </div>
+
+                <!-- Feature H: Ecosystem Sync (WebRTC) -->
+                <div class="lab-card glass">
+                    <div class="lab-header"><i data-feather="smartphone"></i> Ecosystem Sync (P2P Remote Control)</div>
+                    <p class="lab-desc">Scan the QR code with your mobile device to establish a direct WebRTC Peer-to-Peer connection. Your phone will transform into a live remote control for this portfolio.</p>
+                    
+                    <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+                        <button class="btn-action solid" id="generate-qr-btn">Generate Secure Pairing Code</button>
+                        <div id="qr-container" style="background: white; padding: 10px; border-radius: 8px; display: none;"></div>
+                        <div id="sync-log" class="lab-log" style="flex: 1; min-width: 200px; display: none; align-items: center; gap: 10px;"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 7: CONNECT -->
+        <section id="connect" class="section connect-section">
+            <div class="connect-grid">
+                <div class="connect-left fade-in">
+                    <span class="mono-label">[06 / coordinate]</span>
+                    <h2 class="connect-title">Let's build something <span class="gradient-text">exceptional</span>.</h2>
+                    <p class="connect-desc">Open for research partnerships, internship opportunities, and modern full-stack web/app development projects.</p>
+                    
+                    <div class="mail-channel">
+                        <span class="mono-label">Direct Mail Connection</span>
+                        <a href="mailto:contact@adhi.is-a.dev" class="mail-anchor">contact@adhi.is-a.dev</a>
+                    </div>
+                </div>
+                <div class="connect-right fade-in">
+                    <form class="connect-form">
+                        <!-- Make.com Webhook Integration -->
+                        <input type="hidden" name="form_type" value="contact_message">
+                        <div class="form-row">
+                            <input type="text" name="name" placeholder="Your Name" required maxlength="100">
+                            <input type="email" name="email" placeholder="Your Email" required maxlength="150">
+                        </div>
+                        <textarea name="message" placeholder="Tell me about your system vision..." rows="5" required maxlength="2000"></textarea>
+                        <button type="submit" class="submit-btn">Send Message <i data-feather="arrow-right"></i></button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Terminal removed per request -->
+
+
+    </main>
+
+    <!-- Footer System -->
+    <footer class="footer">
+        <div class="footer-container">
+            <p>&copy; 2026 Adarsh B A. SaaS Obsidian Edition. Engineered with Vanilla CSS & JS. <span class="secret-trigger" id="rateMeTrigger" title="Rate this portfolio" aria-label="Rate this portfolio"><i data-feather="star" class="mini-icon"></i></span></p>
+            <div class="footer-links">
+                <a href="https://github.com/developeradhi" target="_blank"><i data-feather="github" class="mini-icon"></i> GitHub</a>
+                <a href="https://linkedin.com/in/developeradhi" target="_blank"><i data-feather="linkedin" class="mini-icon"></i> LinkedIn</a>
+                <a href="https://x.com/itzz__adhi" target="_blank"><i data-feather="twitter" class="mini-icon"></i> Twitter</a>
+                <a href="https://instagram.com/itzz__adhi" target="_blank"><i data-feather="instagram" class="mini-icon"></i> Instagram</a>
+                <a href="https://www.reddit.com/user/am2206" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="mini-icon"><path d="M6.167 8a.83.83 0 0 0-.83.83c0 .459.372.84.83.831a.831.831 0 0 0 0-1.661m1.843 3.647c.315 0 1.403-.038 1.976-.611a.23.23 0 0 0 0-.306.213.213 0 0 0-.306 0c-.353.363-1.126.487-1.67.487-.545 0-1.308-.124-1.671-.487a.213.213 0 0 0-.306 0 .213.213 0 0 0 0 .306c.564.563 1.652.61 1.977.61zm.992-2.807c0 .458.373.83.831.83s.83-.381.83-.83a.831.831 0 0 0-1.66 0z"/><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.828-1.165c-.315 0-.602.124-.812.325-.801-.573-1.9-.945-3.121-.993l.534-2.501 1.738.372a.83.83 0 1 0 .83-.869.83.83 0 0 0-.744.468l-1.938-.41a.2.2 0 0 0-.153.028.2.2 0 0 0-.086.134l-.592 2.788c-1.24.038-2.358.41-3.17.992-.21-.2-.496-.324-.81-.324a1.163 1.163 0 0 0-.478 2.224q-.03.17-.029.353c0 1.795 2.091 3.256 4.669 3.256s4.668-1.451 4.668-3.256c0-.114-.01-.238-.029-.353.401-.181.688-.592.688-1.069 0-.65-.525-1.165-1.165-1.165"/></svg> Reddit</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Project Case Study Detail Modal -->
+    <div class="project-modal" id="project-modal">
+        <div class="modal-overlay" onclick="closeProjectModal()"></div>
+        <div class="modal-content glass">
+            <button class="modal-close" onclick="closeProjectModal()"><i data-feather="x"></i></button>
+            <div class="modal-body" id="modal-body-content">
+                <!-- Content injected dynamically via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Secret Rating Modal -->
+    <div class="rating-modal" id="rating-modal">
+        <div class="modal-overlay" onclick="closeRatingModal()"></div>
+        <div class="rating-content glass">
+            <button class="modal-close" onclick="closeRatingModal()"><i data-feather="x"></i></button>
+            <div class="rating-body" id="rating-body-content">
+                <h3>Rate this Portfolio! 🌟</h3>
+                <p>Your feedback fuels the engine.</p>
+                <form id="rating-form" class="rating-form">
+                    <input type="hidden" name="form_type" value="portfolio_rating">
+                    <input type="hidden" name="subject" value="New Portfolio Rating!">
+                    <input type="hidden" name="rating_score" id="rating-score-input" value="0">
+                    <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+
+                    <input type="text" name="name" class="form-input rating-email-input" placeholder="Your Name (Optional)" maxlength="100" style="margin-bottom: 1rem;">
+                    <input type="email" name="email" class="form-input rating-email-input" placeholder="Your Email (Optional)" maxlength="150" style="margin-bottom: 1rem;">
+                    <textarea name="feedback" class="form-input rating-textarea" placeholder="Leave a review or comment... (Optional)" maxlength="2000" style="margin-bottom: 1.5rem;"></textarea>
+
+                    <div class="star-rating">
+                        <i data-feather="star" class="rating-star" data-value="1"></i>
+                        <i data-feather="star" class="rating-star" data-value="2"></i>
+                        <i data-feather="star" class="rating-star" data-value="3"></i>
+                        <i data-feather="star" class="rating-star" data-value="4"></i>
+                        <i data-feather="star" class="rating-star" data-value="5"></i>
+                    </div>
+                    
+                    <button type="submit" class="btn-action solid rating-submit-btn" disabled>Submit Rating</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Remote Control Dashboard (Hidden by Default) -->
+    <div id="mobile-remote-dashboard" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:var(--bg-color); z-index:999999; flex-direction:column; padding:2rem; box-sizing:border-box;">
+        <h2 style="text-align:center; margin-bottom:0.5rem; color:var(--accent-indigo);">Uplink Established</h2>
+        <p style="text-align:center; color:var(--accent-cyan); font-family:var(--font-mono); margin-bottom:3rem;">P2P Ecosystem Remote Active.</p>
+        
+        <div style="display:grid; gap:20px; width:100%; max-width:400px; margin:0 auto;">
+            <button class="btn-action solid" id="remote-theme-btn" style="padding:20px; font-size:1.2rem; display:flex; justify-content:center; align-items:center; gap:10px;"><i data-feather="moon"></i> Toggle Dark Mode</button>
+            <button class="btn-action solid" id="remote-scroll-btn" style="padding:20px; font-size:1.2rem; display:flex; justify-content:center; align-items:center; gap:10px;"><i data-feather="arrow-down"></i> Scroll Down</button>
+            <button class="btn-action solid" id="remote-confetti-btn" style="padding:20px; font-size:1.2rem; display:flex; justify-content:center; align-items:center; gap:10px;"><i data-feather="award"></i> Trigger Confetti</button>
+            <button class="btn-action solid" id="remote-glitch-btn" style="padding:20px; font-size:1.2rem; display:flex; justify-content:center; align-items:center; gap:10px; background:var(--accent-emerald); color:#fff;"><i data-feather="cpu"></i> System Glitch</button>
+        </div>
+        
+        <div id="remote-status-log" style="text-align:center; margin-top:auto; font-family:var(--font-mono); font-size:0.8rem; color:var(--text-secondary);">Transmitting on secure channel...</div>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-to-top" id="scrollToTopBtn" aria-label="Scroll to top">
+        <i data-feather="arrow-up"></i>
+    </button>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
