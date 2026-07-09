@@ -10,6 +10,10 @@
     <link rel="canonical" href="https://adhi.is-a.dev/">
     <meta name="theme-color" content="#070709">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    
+    <!-- ── Advanced SEO & Googlebot Directives ── -->
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <!-- ── Open Graph (LinkedIn, WhatsApp, Discord, Telegram, Facebook) ── -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://adhi.is-a.dev/">
@@ -64,31 +68,44 @@
     
     <!-- SEO: Schema.org Structured Data (Knowledge Graph) -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Adarsh B A",
-      "url": "https://adhi.is-a.dev",
-      "jobTitle": "Full-Stack Software Engineer",
-      "description": "Computer Science undergraduate at BIET Davanagere. Full-Stack engineer building ERP systems, POS platforms & modern web apps.",
-      "sameAs": [
-        "https://github.com/developeradhi",
-        "https://linkedin.com/in/developeradhi",
-        "https://twitter.com/itzz__adhi",
-        "https://instagram.com/itzz__adhi",
-        "https://www.reddit.com/user/am2206",
-        "https://opentalents.in/adarsh-b-a"
-      ],
-      "founder": {
-        "@type": "Organization",
-        "name": "RootNode Rebels",
-        "url": "https://www.github.com/orgs/RootNode-Rebels/"
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Adarsh B A",
+        "url": "https://adhi.is-a.dev",
+        "jobTitle": "Full-Stack Software Engineer",
+        "description": "Computer Science undergraduate at BIET Davanagere. Full-Stack engineer building ERP systems, POS platforms & modern web apps.",
+        "sameAs": [
+          "https://github.com/developeradhi",
+          "https://linkedin.com/in/developeradhi",
+          "https://twitter.com/itzz__adhi",
+          "https://instagram.com/itzz__adhi",
+          "https://www.reddit.com/user/am2206",
+          "https://opentalents.in/adarsh-b-a"
+        ],
+        "founder": {
+          "@type": "Organization",
+          "name": "RootNode Rebels",
+          "url": "https://www.github.com/orgs/RootNode-Rebels/"
+        },
+        "alumniOf": {
+          "@type": "CollegeOrUniversity",
+          "name": "Bapuji Institute of Engineering and Technology (BIET)"
+        }
       },
-      "alumniOf": {
-        "@type": "CollegeOrUniversity",
-        "name": "Bapuji Institute of Engineering and Technology (BIET)"
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Adarsh B A Portfolio",
+        "url": "https://adhi.is-a.dev/",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://adhi.is-a.dev/?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
       }
-    }
+    ]
     </script>
 </head>
 <body>
@@ -152,7 +169,7 @@
             </h1>
             
             <p class="hero-description fade-in">
-                Pursuing BE in Computer Engineering at Bapuji Institute of Engineering and Technology (BIET). Dedicated to engineering responsive client-side applications, modular API backends, and high-performance database systems.
+                Full-Stack Software Engineer specializing in scalable ERP systems, POS platforms, and modern web applications. Currently pursuing a BE in Computer Engineering at BIET.
             </p>
             
             <div class="hero-cta fade-in">
