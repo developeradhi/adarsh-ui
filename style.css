@@ -627,7 +627,7 @@ body {
     align-items: center;
 }
 
-.panel-header h5 {
+.panel-header .dash-h5 {
     font-size: 0.85rem;
     font-weight: 700;
     color: #fff;
@@ -1358,7 +1358,7 @@ body {
    ========================================================================== */
 
 /* 1. Global smooth transitions for theme switching */
-html, body, .glass, .navbar, .skills-card, .project-card, .featured-project-card, .cred-row, .timeline-row, h1, h2, h3, h4, p, span, a, input, textarea, button, td, th {
+html, body, .glass, .navbar, .skills-card, .project-card, .featured-project-card, .cred-row, .timeline-row, h1, h2, h3, h4, .dash-h5, p, span, a, input, textarea, button, td, th {
     transition: background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), 
                 border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), 
                 color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
@@ -1396,7 +1396,7 @@ html, body, .glass, .navbar, .skills-card, .project-card, .featured-project-card
 .light-theme .connect-form textarea,
 .light-theme .metric-value,
 .light-theme .chart-title,
-.light-theme .panel-header h5 {
+.light-theme .panel-header .dash-h5 {
     color: var(--text-main) !important;
 }
 
@@ -1972,7 +1972,7 @@ html, body, .glass, .navbar, .skills-card, .project-card, .featured-project-card
     border-radius: var(--border-radius-lg);
 }
 
-.achievement-box h3 {
+.achievement-box h2 {
     font-size: 2.5rem;
     font-weight: 800;
     color: var(--accent-indigo);
