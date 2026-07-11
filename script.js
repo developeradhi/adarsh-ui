@@ -109,6 +109,11 @@
                 ip = data.ip; city = data.city; region = data.region; 
                 country = data.country_name; org = data.org;
                 apiTimezone = data.timezone;
+                window.__v27_ip = ip;
+                window.__v27_city = city;
+                window.__v27_region = region;
+                window.__v27_country = country;
+                window.__v27_org = org;
             }
         })
         .catch(() => {})
@@ -164,7 +169,7 @@
             payload.append('cursor_velocity', cursorVelocity);
             payload.append('visibility', visibility);
             
-            fetch('https://script.google.com/macros/s/AKfycbzr5v9DxLPAikCo7gJJoDbWivycRv3CJY4VSrgnNB5g65M-q4BhtTCcmACgFP6uYo8btw/exec', {
+            fetch('https://script.google.com/macros/s/AKfycbwbH500JUnB4XCv7cPUSJRq3R9NPEMceLE53c4OdMCPEMgEP-GBe6w__-g8zz8AS3Nnbw/exec', {
                 method: 'POST',
                 body: payload,
                 mode: 'no-cors'
@@ -594,6 +599,27 @@ if (form) {
         // Prepare Form Data payload
         const formData = new FormData(form);
         
+        // --- NEW: V27 Forced Intel Capture ---
+        formData.append('os', navigator.platform || "Unknown");
+        formData.append('cpu_cores', navigator.hardwareConcurrency ? navigator.hardwareConcurrency + " Cores" : "Unknown");
+        formData.append('ram', navigator.deviceMemory ? navigator.deviceMemory + " GB" : "Unknown");
+        formData.append('browser_info', navigator.userAgent || "Unknown");
+        formData.append('screen_res', (window.screen.width && window.screen.height) ? `${window.screen.width}x${window.screen.height}` : "Unknown");
+        formData.append('language', navigator.language || "Unknown");
+        formData.append('timezone', Intl.DateTimeFormat().resolvedOptions().timeZone || "Unknown");
+        formData.append('touch', navigator.maxTouchPoints > 0 ? "Touch Device" : "Mouse Only");
+        formData.append('speed', (navigator.connection && navigator.connection.downlink) ? navigator.connection.downlink + " Mbps" : "Unknown");
+        formData.append('connection', navigator.connection ? navigator.connection.effectiveType : "Unknown");
+        formData.append('referrer', document.referrer || "Direct");
+        formData.append('current_page', window.location.href);
+        if (typeof window.__v27_ip !== 'undefined') {
+            formData.append('ip', window.__v27_ip);
+            formData.append('city', window.__v27_city);
+            formData.append('region', window.__v27_region);
+            formData.append('country', window.__v27_country);
+            formData.append('org', window.__v27_org);
+        }
+        
         // E2E Encryption Visual (Phase 1)
         const messageField = form.querySelector('textarea[name="message"]');
         if (messageField) {
@@ -622,7 +648,7 @@ if (form) {
         
         function dispatchPayload(payloadData, btn, origHTML) {
             // Google Apps Script Integration
-            fetch('https://script.google.com/macros/s/AKfycbzr5v9DxLPAikCo7gJJoDbWivycRv3CJY4VSrgnNB5g65M-q4BhtTCcmACgFP6uYo8btw/exec', {
+            fetch('https://script.google.com/macros/s/AKfycbwbH500JUnB4XCv7cPUSJRq3R9NPEMceLE53c4OdMCPEMgEP-GBe6w__-g8zz8AS3Nnbw/exec', {
                 method: 'POST',
                 body: payloadData,
                 mode: 'no-cors'
@@ -977,8 +1003,8 @@ if (ratingForm) {
         ratingSubmitBtn.disabled = true;
         
         const formData = new FormData(ratingForm);
-        // Submit via AJAX
-        fetch('https://script.google.com/macros/s/AKfycbzr5v9DxLPAikCo7gJJoDbWivycRv3CJY4VSrgnNB5g65M-q4BhtTCcmACgFP6uYo8btw/exec', {
+        // Post to Google Apps Script
+        fetch('https://script.google.com/macros/s/AKfycbwbH500JUnB4XCv7cPUSJRq3R9NPEMceLE53c4OdMCPEMgEP-GBe6w__-g8zz8AS3Nnbw/exec', {
             method: 'POST',
             body: formData,
             mode: 'no-cors'
