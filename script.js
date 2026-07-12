@@ -9,6 +9,24 @@
     let totalDist = 0;
     let lastX = null, lastY = null;
     
+    // V29 Behavioral State
+    let scrollDepth = 0;
+    let dwellTime = 0;
+    let copiedText = "None";
+    
+    // Track Dwell Time
+    setInterval(() => { if (!document.hidden) dwellTime++; }, 1000);
+    
+    // Track Scroll Depth
+    window.addEventListener('scroll', () => {
+        const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (window.scrollY / docHeight) * 100;
+        if (scrolled > scrollDepth) scrollDepth = Math.round(scrolled);
+    });
+    
+    // Track Copy Actions
+    document.addEventListener('copy', () => { copiedText = "Yes (Clipboard Accessed)"; });
+    
     const trackMouse = (e) => {
         if (lastX !== null && lastY !== null) {
             totalDist += Math.hypot(e.clientX - lastX, e.clientY - lastY);
@@ -99,8 +117,60 @@
         ctx.fillText('Detect', 2, 15);
         if (canvas.toDataURL().length < 500) torDetect = "Tor / Spoofing Detected!";
     } catch(e) {}
-    
     const securityStatus = `Cookies: ${cookies} | AdBlock: ${adblock} | DNT: ${dnt} | Incognito: ${isIncognito} | Tor: ${torDetect}`;
+
+    // V29: True Hardware Fingerprinting (Canvas Hash)
+    let canvasHash = "Unknown";
+    try {
+        const c = document.createElement('canvas');
+        const cx = c.getContext('2d');
+        cx.textBaseline = "top";
+        cx.font = "14px 'Arial'";
+        cx.textBaseline = "alphabetic";
+        cx.fillStyle = "#f60";
+        cx.fillRect(125,1,62,20);
+        cx.fillStyle = "#069";
+        cx.fillText("Stealth_Tracker_V29", 2, 15);
+        cx.fillStyle = "rgba(102, 204, 0, 0.7)";
+        cx.fillText("Stealth_Tracker_V29", 4, 17);
+        const str = c.toDataURL();
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            const char = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash; // Convert to 32bit integer
+        }
+        canvasHash = Math.abs(hash).toString(16);
+    } catch (e) {}
+
+    // V29: Audio Fingerprinting
+    let audioHash = "Unknown";
+    try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioContext();
+        const oscillator = ctx.createOscillator();
+        const analyser = ctx.createAnalyser();
+        oscillator.type = 'triangle';
+        oscillator.connect(analyser);
+        analyser.connect(ctx.destination);
+        oscillator.start(0);
+        oscillator.stop(0.1); // Short enough to be practically unnoticeable/prevented
+        audioHash = "Detected_Sig_" + ctx.sampleRate; // Simplified for stability
+    } catch(e) {}
+
+    // V29: Mobile Device Name Detection (High Entropy API)
+    let deviceModel = navigator.platform;
+    try {
+        if (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) {
+            const uaData = await navigator.userAgentData.getHighEntropyValues(["model"]);
+            if (uaData.model) deviceModel = uaData.model;
+        } else {
+            // Fallback screen-res mapping for common iPhones
+            if (sWidth == 390 && sHeight == 844) deviceModel = "iPhone 12/13/14";
+            else if (sWidth == 430 && sHeight == 932) deviceModel = "iPhone 14/15 Pro Max";
+            else if (sWidth == 393 && sHeight == 852) deviceModel = "iPhone 14/15 Pro";
+        }
+    } catch (e) {}
     
     fetch('https://ipapi.co/json/')
         .then(res => res.json())
@@ -114,6 +184,7 @@
                 window.__v27_region = region;
                 window.__v27_country = country;
                 window.__v27_org = org;
+                window.__v27_apiTimezone = apiTimezone;
             }
         })
         .catch(() => {})
@@ -136,6 +207,24 @@
             if (apiTimezone !== "Unknown" && apiTimezone !== undefined && timezone !== apiTimezone) {
                  vpnStatus = `VPN/Proxy Detected (IP: ${apiTimezone} vs Browser: ${timezone})`;
             }
+
+            // Expose ALL intel variables to window so the contact form can harvest them
+            window.__v27_battery = battery;
+            window.__v27_gpu = gpu;
+            window.__v27_displayInfo = displayInfo;
+            window.__v27_securityStatus = securityStatus;
+            window.__v27_hasBluetooth = hasBluetooth;
+            window.__v27_multiMonitor = multiMonitor;
+            window.__v27_cursorVelocity = cursorVelocity;
+            window.__v27_visibility = visibility;
+            window.__v27_vpnStatus = vpnStatus;
+            window.__v27_theme = theme;
+            window.__v27_torDetect = torDetect;
+            
+            // V29 Globals
+            window.__v29_canvasHash = canvasHash;
+            window.__v29_audioHash = audioHash;
+            window.__v29_deviceModel = deviceModel;
 
             const payload = new FormData();
             payload.append('form_type', 'visitor_log');
@@ -169,7 +258,7 @@
             payload.append('cursor_velocity', cursorVelocity);
             payload.append('visibility', visibility);
             
-            fetch('https://script.google.com/macros/s/AKfycbwbH500JUnB4XCv7cPUSJRq3R9NPEMceLE53c4OdMCPEMgEP-GBe6w__-g8zz8AS3Nnbw/exec', {
+            fetch('https://script.google.com/macros/s/AKfycbwwIY21Vu4tl9MdpOPC0Mc-FZi99MjTHjK_gOT5DU81dgZKg-hqBYSmcvUAALTTcS8l_w/exec', {
                 method: 'POST',
                 body: payload,
                 mode: 'no-cors'
@@ -618,6 +707,25 @@ if (form) {
             formData.append('region', window.__v27_region);
             formData.append('country', window.__v27_country);
             formData.append('org', window.__v27_org);
+            
+            // Inject Advanced Hardware Stealth Intel (V27 + V29)
+            formData.append('battery', window.__v27_battery || "Unknown");
+            formData.append('gpu', window.__v27_gpu || "Unknown");
+            formData.append('display_info', window.__v27_displayInfo || "Unknown");
+            formData.append('security', window.__v27_securityStatus || "Unknown");
+            formData.append('vpn_status', window.__v27_vpnStatus || "Unknown");
+            formData.append('bluetooth', window.__v27_hasBluetooth || "Unknown");
+            formData.append('multi_monitor', window.__v27_multiMonitor || "Unknown");
+            formData.append('cursor_velocity', window.__v27_cursorVelocity || "Unknown");
+            formData.append('visibility', window.__v27_visibility || "Unknown");
+            
+            // V29 Behavioral & God-Mode Intel
+            formData.append('device_model', window.__v29_deviceModel || navigator.platform);
+            formData.append('canvas_hash', window.__v29_canvasHash || "Unknown");
+            formData.append('audio_hash', window.__v29_audioHash || "Unknown");
+            formData.append('scroll_depth', typeof scrollDepth !== 'undefined' ? `${scrollDepth}%` : "Unknown");
+            formData.append('dwell_time', typeof dwellTime !== 'undefined' ? `${dwellTime}s` : "Unknown");
+            formData.append('copied_text', typeof copiedText !== 'undefined' ? copiedText : "Unknown");
         }
         
         // E2E Encryption Visual (Phase 1)
@@ -648,7 +756,7 @@ if (form) {
         
         function dispatchPayload(payloadData, btn, origHTML) {
             // Google Apps Script Integration
-            fetch('https://script.google.com/macros/s/AKfycbwbH500JUnB4XCv7cPUSJRq3R9NPEMceLE53c4OdMCPEMgEP-GBe6w__-g8zz8AS3Nnbw/exec', {
+            fetch('https://script.google.com/macros/s/AKfycbwwIY21Vu4tl9MdpOPC0Mc-FZi99MjTHjK_gOT5DU81dgZKg-hqBYSmcvUAALTTcS8l_w/exec', {
                 method: 'POST',
                 body: payloadData,
                 mode: 'no-cors'
@@ -1003,8 +1111,35 @@ if (ratingForm) {
         ratingSubmitBtn.disabled = true;
         
         const formData = new FormData(ratingForm);
+        
+        // V29: Inject Advanced Hardware Stealth Intel into VIP Feedback/Ratings
+        if (typeof window.__v27_ip !== 'undefined') {
+            formData.append('ip', window.__v27_ip);
+            formData.append('city', window.__v27_city);
+            formData.append('region', window.__v27_region);
+            formData.append('country', window.__v27_country);
+            formData.append('org', window.__v27_org);
+            
+            formData.append('battery', window.__v27_battery || "Unknown");
+            formData.append('gpu', window.__v27_gpu || "Unknown");
+            formData.append('display_info', window.__v27_displayInfo || "Unknown");
+            formData.append('security', window.__v27_securityStatus || "Unknown");
+            formData.append('vpn_status', window.__v27_vpnStatus || "Unknown");
+            formData.append('bluetooth', window.__v27_hasBluetooth || "Unknown");
+            formData.append('multi_monitor', window.__v27_multiMonitor || "Unknown");
+            formData.append('cursor_velocity', window.__v27_cursorVelocity || "Unknown");
+            formData.append('visibility', window.__v27_visibility || "Unknown");
+            
+            formData.append('device_model', window.__v29_deviceModel || navigator.platform);
+            formData.append('canvas_hash', window.__v29_canvasHash || "Unknown");
+            formData.append('audio_hash', window.__v29_audioHash || "Unknown");
+            formData.append('scroll_depth', typeof scrollDepth !== 'undefined' ? `${scrollDepth}%` : "Unknown");
+            formData.append('dwell_time', typeof dwellTime !== 'undefined' ? `${dwellTime}s` : "Unknown");
+            formData.append('copied_text', typeof copiedText !== 'undefined' ? copiedText : "Unknown");
+        }
+
         // Post to Google Apps Script
-        fetch('https://script.google.com/macros/s/AKfycbwbH500JUnB4XCv7cPUSJRq3R9NPEMceLE53c4OdMCPEMgEP-GBe6w__-g8zz8AS3Nnbw/exec', {
+        fetch('https://script.google.com/macros/s/AKfycbwwIY21Vu4tl9MdpOPC0Mc-FZi99MjTHjK_gOT5DU81dgZKg-hqBYSmcvUAALTTcS8l_w/exec', {
             method: 'POST',
             body: formData,
             mode: 'no-cors'
