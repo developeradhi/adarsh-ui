@@ -311,11 +311,13 @@ if (themeToggle) {
     const storedTheme = localStorage.getItem('portfolio-theme');
     if (storedTheme === 'light') {
         document.body.classList.add('light-theme');
+        document.documentElement.classList.add('light-theme');
         updateThemeIcon(true);
     }
 
     themeToggle.addEventListener('click', () => {
         const isLight = document.body.classList.toggle('light-theme');
+        document.documentElement.classList.toggle('light-theme');
         localStorage.setItem('portfolio-theme', isLight ? 'light' : 'dark');
         
         const themeIcon = themeToggle.querySelector('.theme-icon');
