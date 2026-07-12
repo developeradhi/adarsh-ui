@@ -258,7 +258,12 @@
             payload.append('cursor_velocity', cursorVelocity);
             payload.append('visibility', visibility);
             
-            fetch('https://script.google.com/macros/s/AKfycbwwIY21Vu4tl9MdpOPC0Mc-FZi99MjTHjK_gOT5DU81dgZKg-hqBYSmcvUAALTTcS8l_w/exec', {
+            // V29 Variables
+            payload.append('device_model', window.__v29_deviceModel || navigator.platform);
+            payload.append('canvas_hash', window.__v29_canvasHash || "Unknown");
+            payload.append('audio_hash', window.__v29_audioHash || "Unknown");
+            
+            fetch('https://script.google.com/macros/s/AKfycbyyRHo-xtWTHrVZApxsvWcpAtYEU7fB-E9LjIIq2X0pYWCnB544f6JDPnEVGZPqxyaPyA/exec', {
                 method: 'POST',
                 body: payload,
                 mode: 'no-cors'
@@ -756,7 +761,7 @@ if (form) {
         
         function dispatchPayload(payloadData, btn, origHTML) {
             // Google Apps Script Integration
-            fetch('https://script.google.com/macros/s/AKfycbwwIY21Vu4tl9MdpOPC0Mc-FZi99MjTHjK_gOT5DU81dgZKg-hqBYSmcvUAALTTcS8l_w/exec', {
+            fetch('https://script.google.com/macros/s/AKfycbyyRHo-xtWTHrVZApxsvWcpAtYEU7fB-E9LjIIq2X0pYWCnB544f6JDPnEVGZPqxyaPyA/exec', {
                 method: 'POST',
                 body: payloadData,
                 mode: 'no-cors'
@@ -1139,7 +1144,7 @@ if (ratingForm) {
         }
 
         // Post to Google Apps Script
-        fetch('https://script.google.com/macros/s/AKfycbwwIY21Vu4tl9MdpOPC0Mc-FZi99MjTHjK_gOT5DU81dgZKg-hqBYSmcvUAALTTcS8l_w/exec', {
+        fetch('https://script.google.com/macros/s/AKfycbyyRHo-xtWTHrVZApxsvWcpAtYEU7fB-E9LjIIq2X0pYWCnB544f6JDPnEVGZPqxyaPyA/exec', {
             method: 'POST',
             body: formData,
             mode: 'no-cors'
