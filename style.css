@@ -179,6 +179,187 @@ body {
     color: #fff;
     text-decoration: none;
     white-space: nowrap;
+/* Global Brand System Variables */
+:root {
+    --bg-base: #070709;
+    --card-bg: rgba(13, 13, 22, 0.65);
+    --border-color: rgba(255, 255, 255, 0.09);
+    --border-hover: rgba(255, 255, 255, 0.18);
+
+    /* ── Accent Colors (contrast-checked) ── */
+    --accent-indigo: #818cf8;   /* Brightened — passes WCAG AA on dark bg */
+    --accent-indigo-deep: #6366f1;  /* For backgrounds/gradients */
+    --accent-teal: #2dd4bf;     /* Brightened teal — WCAG AA */
+    --accent-cyan: #22d3ee;     /* Brightened cyan — WCAG AA */
+    --accent-emerald: #34d399;  /* Bright emerald for success states */
+
+    /* ── Text Scale (WCAG-compliant contrast ratios) ── */
+    --text-main: #f1f5f9;       /* 15.8:1 contrast on bg — AAA */
+    --text-secondary: #cbd5e1;  /* 9.4:1 — AAA */
+    --text-muted: #94a3b8;      /* 5.9:1 — AA (was too dim before) */
+    --text-subtle: #64748b;     /* 3.9:1 — AA Large text only */
+
+    /* ── Typography ── */
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: 'Fira Code', monospace;
+
+    --transition-smooth: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    --transition-fast: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    --border-radius-lg: 20px;
+    --border-radius-md: 12px;
+}
+
+/* ── NAV LOGO ICON ── */
+.nav-logo-icon {
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: var(--transition-fast);
+}
+.nav-logo:hover .nav-logo-icon {
+    filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.6)); /* soft purple glow */
+}
+.nav-logo-text {
+    background: linear-gradient(90deg, #f1f5f9 60%, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Reset & Global styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    background-color: var(--bg-base);
+    color: var(--text-main);
+}
+html.light-theme {
+    background-color: #f8fafc;
+    color: #0f172a;
+}
+html.light-theme {
+    background-color: #f8fafc;
+    color: #0f172a;
+}
+
+body {
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    overflow-x: hidden;
+    background-color: var(--bg-base);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-base);
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-indigo);
+}
+
+/* Dynamic Spotlight Ambient Background (follows cursor dynamically) */
+.background-radial {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -2;
+    background-image: 
+        radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(99, 102, 241, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(20, 184, 166, 0.04) 0%, transparent 40%);
+    background-size: cover;
+    pointer-events: none;
+}
+
+#ambient-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+    transition: opacity 1s ease;
+}
+
+/* Translucent Glassmorphism Module -> NEO BENTO MATTE FROST */
+.glass {
+    position: relative;
+    background: var(--card-bg);
+    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+    border: 1px solid var(--border-color);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.15),
+        inset 0 1px 1px rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius-lg);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+/* Pseudo-element to clip inner contents for the border gradient */
+.glass-inner {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: inherit;
+    overflow: hidden;
+    z-index: -1;
+}
+
+/* Soft Neumorphic Glow Hover Effect */
+.glass:hover {
+    transform: translateY(-4px);
+    box-shadow: 
+        0 24px 48px rgba(0, 0, 0, 0.45),
+        0 0 0 1px rgba(129, 140, 248, 0.12),
+        0 0 24px rgba(129, 140, 248, 0.06);
+    border-color: rgba(255, 255, 255, 0.14);
+}
+
+.navbar.glass:hover, .modal-content.glass:hover {
+    transform: translateX(-50%);
+    border-color: var(--border-color);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+/* Floating Navigation Header */
+.navbar {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 20px;
+    border-radius: var(--border-radius-lg);
+    z-index: 9999;
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-sans);
+    font-weight: 800;
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+    color: #fff;
+    text-decoration: none;
+    white-space: nowrap;
 }
 
 .nav-logo:hover {
@@ -187,7 +368,7 @@ body {
 
 .nav-links-wrapper {
     display: flex;
-    gap: 1.2rem;
+    gap: 2rem;
 }
 
 .nav-link {
@@ -1215,6 +1396,7 @@ body {
 }
 
 .footer-container {
+    width: 90%;
     max-width: 1100px;
     margin: 0 auto;
     padding: 0 20px;
@@ -1225,152 +1407,13 @@ body {
     color: var(--text-muted);
 }
 .footer-container p {
-    flex: 1;
+    flex: none;
     line-height: 1.6;
+    white-space: nowrap;
 }
 
 .footer-links {
     display: flex;
-    gap: 1.25rem;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    flex: 2;
-}
-
-.footer-links a {
-    color: var(--text-muted);
-    text-decoration: none;
-    transition: var(--transition-smooth);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-}
-
-.footer-links a svg {
-    width: 14px;
-    height: 14px;
-}
-
-.footer-links a:hover {
-    color: #fff;
-}
-
-/* Fade-in Scroll Reveal triggers */
-.fade-in {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.fade-in.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* Custom Responsive Styles */
-@media (max-width: 1024px) {
-    .navbar {
-        padding: 0.6rem 1.5rem;
-    }
-    .hero-section {
-        padding-top: 120px;
-    }
-    .featured-project-card {
-        grid-template-columns: 1fr;
-        gap: 3rem;
-        padding: 2.2rem;
-    }
-    .skills-grid {
-        grid-template-columns: 1fr;
-        gap: 24px;
-    }
-    .languages-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-    .connect-grid {
-        grid-template-columns: 1fr;
-        gap: 4rem;
-    }
-}
-
-@media (max-width: 768px) {
-    body {
-        cursor: default; /* Disable trailing cursor physics on low viewport */
-    }
-    
-    .cursor-dot, .cursor-glow {
-        display: none;
-    }
-    
-    .nav-links-wrapper {
-        display: flex;
-        overflow-x: auto;
-        gap: 1rem;
-        max-width: 50vw;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-    }
-    .nav-links-wrapper::-webkit-scrollbar {
-        display: none;
-    }
-    
-    .hero-title {
-        font-size: 2.3rem;
-    }
-    
-    .projects-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .cred-row {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-        padding: 1.5rem;
-    }
-    
-    .verify-btn {
-        justify-self: flex-start;
-    }
-    
-    .secret-trigger {
-        opacity: 0.8;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 8px;
-        padding: 8px 16px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        margin-top: 15px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .secret-trigger::after {
-        content: "Share Feedback!";
-        font-family: var(--font-mono);
-        font-size: 0.9rem;
-        margin-left: 8px;
-    }
-    
-    .timeline-row {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-        padding: 2rem 0;
-    }
-    
-    .connect-form .form-row {
-        grid-template-columns: 1fr;
-    }
-    
-    .footer-container {
-        flex-direction: column;
-        gap: 1.5rem;
-        text-align: center;
-    }
-}
-
-/* ==========================================================================
-   ADVANCED FEATURE UPGRADES: THEME SWAPPING, FILTER PILLS & OVERLAY MODAL
-   ========================================================================== */
 
 /* 1. Global smooth transitions for theme switching */
 html, body, .glass, .navbar, .skills-card, .project-card, .featured-project-card, .cred-row, .timeline-row, h1, h2, h3, h4, .dash-h5, p, span, a, input, textarea, button, td, th {
