@@ -1,5 +1,9 @@
 # Adarsh B A - Final Architecture Portfolio
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Code of Conduct](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+
 > A high-performance, interactive, and mechanically advanced portfolio designed for the modern web. Built with raw HTML/CSS/JS without heavy frameworks.
 
 ![Portfolio Preview](preview.png)
@@ -15,16 +19,23 @@ This is not a template. This portfolio is engineered from scratch with a heavy f
 * **Service Worker PWA Integration:** The architecture utilizes a local `sw.js` Service Worker to heavily cache network requests, fonts, and assets, allowing the portfolio to load instantly and function offline.
 * **Dynamic GPU-Accelerated Styling:** No Tailwind. Pure Vanilla CSS using CSS Variables (`var(--bg-color)`), hardware-accelerated animations, and smooth glassmorphism effects tailored for both an *Obsidian Dark* and an *Alpine Light* mode.
 * **F12 Developer CTF Security Protocol:** An integrated easter egg designed for developers who open the browser console. It features a brute-force lockout mechanism and utilizes the Web Crypto API to validate a SHA-256 hash against the correct passphrase.
+* **Edge Personalization & Telemetry:** Uses IP Geolocation API to display server proximity and latency, with a high-performance WebGL Data Visualization for system architecture.
 
 ## 🚀 Technologies Used
-* **Frontend:** HTML5, CSS3, Vanilla ES6 JavaScript
+* **Frontend:** HTML5, CSS3, Vanilla ES6 JavaScript, Three.js
 * **Networking:** WebRTC (PeerJS), Fetch API
 * **Backend Proxy:** Google Apps Script (Serverless)
 * **Email Provider:** Resend API
 * **Icons & Assets:** Feather Icons, QRCode.js, Canvas Confetti
 
 ## 🛡️ Privacy & Security
-All backend logic, database operations (Google Sheets), and API keys are strictly hidden from this repository and run securely on Google's cloud infrastructure. The static files hosted here represent the client presentation layer exclusively.
+All backend logic, database operations (Google Sheets), and API keys are strictly hidden from this repository and run securely on Google's cloud infrastructure. The static files hosted here represent the client presentation layer exclusively. For vulnerability reporting, please see our [Security Policy](SECURITY.md).
+
+## 🤝 Contributing
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for more details on how to get started, and ensure you adhere to our [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## 📄 License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 *Designed and Engineered by Adarsh B A (2026).*
