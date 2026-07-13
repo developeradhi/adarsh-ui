@@ -1224,10 +1224,17 @@ body {
     font-size: 0.8rem;
     color: var(--text-muted);
 }
+.footer-container p {
+    flex: 1;
+    line-height: 1.6;
+}
 
 .footer-links {
     display: flex;
-    gap: 2rem;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    flex: 2;
 }
 
 .footer-links a {
@@ -2728,3 +2735,35 @@ html, body, .glass, .navbar, .skills-card, .project-card, .featured-project-card
         display: none;
     }
 }
+
+
+
+
+
+
+
+
+/* ==========================================================================
+   PREMIUM 3D TILT UPGRADES (PHASE 2)
+   ========================================================================== */
+.featured-project-card, .project-card {
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+
+/* Make inner elements pop out during the tilt! */
+.featured-project-card .project-info,
+.featured-project-card .project-visual,
+.project-card .project-info,
+.project-card .project-visual {
+    transform: translateZ(30px);
+    transition: transform 0.3s ease;
+}
+
+/* Adjust the glare layer to respect border radius */
+.js-tilt-glare {
+    border-radius: var(--border-radius);
+}
+
+
+

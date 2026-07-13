@@ -6,6 +6,8 @@
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Share Feedback | Adarsh B A</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/feather-icons"></script>
@@ -56,9 +58,9 @@
                 <input type="hidden" name="rating_score" id="rating-score-input" value="0">
                 <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
 
-                <input type="text" name="name" class="form-input rating-email-input" placeholder="Your Name (Optional)" maxlength="100" style="margin-bottom: 1rem;">
-                <input type="email" name="email" class="form-input rating-email-input" placeholder="Your Email (Optional)" maxlength="150" style="margin-bottom: 1rem;">
-                <textarea name="feedback" class="form-input rating-textarea" placeholder="Leave a review or comment... (Optional)" maxlength="2000" style="margin-bottom: 1.5rem;"></textarea>
+                <input type="text" name="name" class="form-input rating-email-input" placeholder="Your Name" maxlength="100" style="margin-bottom: 1rem;" required>
+                <input type="email" name="email" class="form-input rating-email-input" placeholder="Your Email" maxlength="150" style="margin-bottom: 1rem;" required>
+                <textarea name="feedback" class="form-input rating-textarea" placeholder="Leave a review or comment..." maxlength="2000" style="margin-bottom: 1.5rem;" required></textarea>
 
                 <div class="star-rating">
                     <i data-feather="star" class="rating-star" data-value="1"></i>

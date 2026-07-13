@@ -1,4 +1,4 @@
-const CACHE_NAME = 'obsidian-portfolio-v11';
+const CACHE_NAME = 'obsidian-portfolio-v28';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
