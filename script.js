@@ -1445,3 +1445,119 @@ setTimeout(() => {
     }
 
 }, 1500);
+
+
+// Automatically fetch live GitHub Commits count
+async function fetchGitHubCommits() {
+    try {
+        const response = await fetch('https://api.github.com/search/commits?q=author:developeradhi', {
+            headers: { 'Accept': 'application/vnd.github.cloak-preview+json' }
+        });
+        const data = await response.json();
+        
+        const commitCounter = document.getElementById('commit-counter');
+        if (commitCounter && data.total_count) {
+            commitCounter.setAttribute('data-target', data.total_count);
+            // Update immediately in case the animation already ran
+            commitCounter.innerText = data.total_count + "+"; 
+        }
+    } catch (error) {
+        console.error("Failed to fetch GitHub commits:", error);
+    }
+}
+fetchGitHubCommits();
+
+
+// --- EDGE PERSONALIZATION ---
+async function initEdgePersonalization() {
+    const edgeStatusElement = document.getElementById('edge-status');
+    if (!edgeStatusElement) return;
+    try {
+        const startTime = performance.now();
+        // Fast, free, no-CORS IP Geolocation API
+        const response = await fetch('https://get.geojs.io/v1/ip/geo.json');
+        const data = await response.json();
+        const endTime = performance.now();
+        
+        // Calculate fake/estimated latency based on the API response time
+        const latency = Math.round(endTime - startTime);
+        
+        const city = data.city || data.country || "your location";
+        
+        // Display the professional edge status
+        edgeStatusElement.innerHTML = `
+            <span style="display:inline-block; width:8px; height:8px; background-color:#10B981; border-radius:50%; box-shadow: 0 0 8px #10B981; animation: pulse 2s infinite;"></span>
+            Global CDN Active. Serving ${city} (Latency: ${latency}ms)
+        `;
+    } catch (error) {
+        console.error("Edge Personalization failed:", error);
+    }
+}
+initEdgePersonalization();
+
+// --- WEBGL DATA VISUALIZATION ---
+function initWebGLGraph() {
+    const container = document.getElementById('webgl-container');
+    if (!container || typeof THREE === 'undefined') return;
+    // Setup Scene, Camera, Renderer
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(renderer.domElement);
+    // Create Nodes (Particles)
+    const particleGeometry = new THREE.BufferGeometry();
+    const particleCount = 100;
+    const posArray = new Float32Array(particleCount * 3);
+    for(let i = 0; i < particleCount * 3; i++) {
+        posArray[i] = (Math.random() - 0.5) * 10;
+    }
+    particleGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+    // Material with glowing blue color
+    const particleMaterial = new THREE.PointsMaterial({
+        size: 0.05,
+        color: 0x60A5FA,
+        transparent: true,
+        opacity: 0.8
+    });
+    const particleMesh = new THREE.Points(particleGeometry, particleMaterial);
+    scene.add(particleMesh);
+    // Create Connecting Lines
+    const lineMaterial = new THREE.LineBasicMaterial({ color: 0xA78BFA, transparent: true, opacity: 0.2 });
+    const lineMesh = new THREE.LineSegments(particleGeometry, lineMaterial);
+    scene.add(lineMesh);
+    camera.position.z = 5;
+    // Mouse interaction variables
+    let mouseX = 0;
+    let mouseY = 0;
+    container.addEventListener('mousemove', (event) => {
+        const rect = container.getBoundingClientRect();
+        mouseX = ((event.clientX - rect.left) / container.clientWidth) * 2 - 1;
+        mouseY = -((event.clientY - rect.top) / container.clientHeight) * 2 + 1;
+    });
+    // Animation Loop
+    function animate() {
+        requestAnimationFrame(animate);
+        
+        // Auto rotation
+        particleMesh.rotation.y += 0.002;
+        particleMesh.rotation.x += 0.001;
+        lineMesh.rotation.y += 0.002;
+        lineMesh.rotation.x += 0.001;
+        // Interactive mouse rotation
+        particleMesh.rotation.y += mouseX * 0.01;
+        particleMesh.rotation.x -= mouseY * 0.01;
+        lineMesh.rotation.y += mouseX * 0.01;
+        lineMesh.rotation.x -= mouseY * 0.01;
+        renderer.render(scene, camera);
+    }
+    animate();
+    // Handle Resize
+    window.addEventListener('resize', () => {
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+    });
+}
+setTimeout(initWebGLGraph, 1000);

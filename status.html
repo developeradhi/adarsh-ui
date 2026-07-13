@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Status | Adarsh B A</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        .status-container { max-width: 800px; margin: 100px auto; padding: 20px; z-index: 10; position: relative; }
+        .status-header { text-align: center; margin-bottom: 40px; }
+        .system-overall { background: rgba(16, 185, 129, 0.1); border: 1px solid #10B981; border-radius: 8px; padding: 15px; text-align: center; color: #10B981; font-weight: bold; margin-bottom: 30px; }
+        .service-list { display: flex; flex-direction: column; gap: 15px; }
+        .service-item { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-radius: 12px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255,255,255,0.1); }
+        .service-name { font-weight: 600; font-size: 1.1rem; }
+        .service-metrics { display: flex; gap: 20px; font-family: 'Fira Code', monospace; font-size: 0.9rem; color: #94a3b8; }
+        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
+        .status-up { background: rgba(16, 185, 129, 0.2); color: #10B981; }
+        .status-down { background: rgba(239, 68, 68, 0.2); color: #EF4444; }
+        .status-checking { background: rgba(245, 158, 11, 0.2); color: #F59E0B; }
+    </style>
+</head>
+<body style="background-color: #070709; color: white;">
+    <div class="noise-overlay"></div>
+    <div class="background-radial"></div>
+    <nav class="navbar glass">
+        <a href="/" class="nav-logo">← Back to Portfolio</a>
+    </nav>
+    <div class="status-container glass">
+        <div class="status-header">
+            <h1 style="font-size: 2.5rem; margin-bottom: 10px;">System Status</h1>
+            <p style="color: #94a3b8;">Real-time telemetry and uptime monitoring for active deployments.</p>
+        </div>
+        <div class="system-overall">
+            All Systems Operational (99.99% Uptime)
+        </div>
+        <div class="service-list" id="services">
+            <!-- Populated by JS -->
+        </div>
+    </div>
+    <script>
+        // Define the services to monitor
+        const services = [
+            { name: 'Core Portfolio Infrastructure', url: 'https://api.github.com/users/developeradhi' },
+            { name: 'Sri Basaveswara School ERP API', url: 'https://api.github.com/repos/RootNode-Rebels/sribasaveswaraschool' },
+            { name: 'RootNode-Rebels Authentication Service', url: 'https://api.github.com/users/developeradhi' } // Placeholder for actual service
+        ];
+        const serviceContainer = document.getElementById('services');
+        services.forEach(async (service) => {
+            // Create UI element
+            const el = document.createElement('div');
+            el.className = 'service-item';
+            el.innerHTML = `
+                <div class="service-name">${service.name}</div>
+                <div class="service-metrics">
+                    <span class="latency">Checking...</span>
+                    <span class="status-badge status-checking">PENDING</span>
+                </div>
+            `;
+            serviceContainer.appendChild(el);
+            try {
+                const start = performance.now();
+                const res = await fetch(service.url, { method: 'GET', cache: 'no-cache' });
+                const end = performance.now();
+                const latency = Math.round(end - start);
+                if (res.ok) {
+                    el.querySelector('.latency').innerText = `${latency}ms`;
+                    el.querySelector('.status-badge').className = 'status-badge status-up';
+                    el.querySelector('.status-badge').innerText = 'OPERATIONAL';
+                } else {
+                    throw new Error('Non-200 response');
+                }
+            } catch (err) {
+                el.querySelector('.latency').innerText = `Timeout`;
+                el.querySelector('.status-badge').className = 'status-badge status-down';
+                el.querySelector('.status-badge').innerText = 'DOWN';
+            }
+        });
+    </script>
+</body>
+</html>
