@@ -1328,8 +1328,8 @@ setTimeout(() => {
         if (typeof Peer === 'undefined') {
             document.getElementById('remote-status-log').innerText = "Error: PeerJS blocked by browser.";
         } else {
-            const peer = new Peer();
-        const statusLog = document.getElementById('remote-status-log');
+            const peer = typeof peerConfig !== 'undefined' ? new Peer(peerConfig) : new Peer();
+            const statusLog = document.getElementById('remote-status-log');
         
         peer.on('open', () => {
             statusLog.innerText = "Connecting to Host...";
@@ -1355,6 +1355,18 @@ setTimeout(() => {
                 document.getElementById('remote-glitch-btn').addEventListener('click', () => {
                     conn.send({ action: 'GLITCH' });
                     navigator.vibrate && navigator.vibrate([100, 50, 100]);
+                });
+                document.getElementById('remote-scroll-up-btn').addEventListener('click', () => {
+                    conn.send({ action: 'SCROLL_UP' });
+                    navigator.vibrate && navigator.vibrate(30);
+                });
+                document.getElementById('remote-top-btn').addEventListener('click', () => {
+                    conn.send({ action: 'TOP' });
+                    navigator.vibrate && navigator.vibrate([30, 50, 30]);
+                });
+                document.getElementById('remote-spotlight-btn').addEventListener('click', () => {
+                    conn.send({ action: 'SPOTLIGHT' });
+                    navigator.vibrate && navigator.vibrate(50);
                 });
             });
             
@@ -1385,7 +1397,7 @@ setTimeout(() => {
                 
                 // Create unique host ID
                 const hostId = 'adarsh-host-' + Math.random().toString(36).substr(2, 6);
-                const peer = new Peer(hostId);
+                const peer = typeof peerConfig !== 'undefined' ? new Peer(hostId, peerConfig) : new Peer(hostId);
                 
                 peer.on('open', (id) => {
                     const connectUrl = window.location.origin + window.location.pathname + '?remote=' + id;
@@ -1426,6 +1438,18 @@ setTimeout(() => {
                         } 
                         else if (data.action === 'SCROLL') {
                             window.scrollBy({ top: window.innerHeight * 0.8, behavior: 'smooth' });
+                        }
+                        else if (data.action === 'SCROLL_UP') {
+                            window.scrollBy({ top: -(window.innerHeight * 0.8), behavior: 'smooth' });
+                        }
+                        else if (data.action === 'TOP') {
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }
+                        else if (data.action === 'SPOTLIGHT') {
+                            const spotlight = document.getElementById('cursor-spotlight');
+                            if (spotlight) {
+                                spotlight.style.display = (spotlight.style.display === 'none' || spotlight.style.display === '') ? 'block' : 'none';
+                            }
                         }
                         else if (data.action === 'CONFETTI') {
                             if (typeof confetti === 'function') {
