@@ -1630,4 +1630,14 @@ if (typeof supabase !== 'undefined') {
             await channel.track({ city: localCity, country: localCountry, joined_at: new Date().toISOString() });
         }
     });
+
+    // --- LIFETIME VISITOR COUNTER ---
+    const path = window.location.pathname || "/";
+    supabaseClient.from('page_views').insert([{ path: path }]).then(({ error }) => {
+        if (error) console.log("Visit not logged globally. Ensure 'page_views' table exists in Supabase.");
+    });
+
+    let personalVisits = parseInt(localStorage.getItem('personalVisits') || '0');
+    personalVisits++;
+    localStorage.setItem('personalVisits', personalVisits);
 }

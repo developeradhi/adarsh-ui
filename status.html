@@ -36,7 +36,7 @@
         </div>
         
         <!-- Live Viewer Telemetry -->
-        <div class="service-item" style="margin-bottom: 30px; border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.05);">
+        <div class="service-item" style="margin-bottom: 20px; border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.05);">
             <div style="display: flex; flex-direction: column;">
                 <div class="service-name" style="display: flex; align-items: center; gap: 10px; color: #10B981;">
                     <div style="width:10px; height:10px; border-radius:50%; background:#10B981; box-shadow: 0 0 10px #10B981; animation: pulse 2s infinite;"></div>
@@ -49,6 +49,22 @@
             <div class="service-metrics" style="align-items: center;">
                 <span id="presence-count" style="font-size: 1.8rem; color: #10B981; font-weight: 800; line-height: 1;">0</span>
                 <span class="status-badge status-up" style="display: flex; align-items: center;">ACTIVE</span>
+            </div>
+        </div>
+
+        <!-- Lifetime Views Telemetry -->
+        <div class="service-item" style="margin-bottom: 30px; border-color: rgba(14, 165, 233, 0.4); background: rgba(14, 165, 233, 0.05);">
+            <div style="display: flex; flex-direction: column;">
+                <div class="service-name" style="display: flex; align-items: center; gap: 10px; color: #0EA5E9;">
+                    <i data-feather="activity"></i> Lifetime Global Visits
+                </div>
+                <div style="margin-top: 10px; font-family: 'Fira Code', monospace; font-size: 0.85rem; color: #94a3b8;">
+                    You have personally visited this site <strong id="personal-visits-count" style="color:#0EA5E9;">0</strong> times.
+                </div>
+            </div>
+            <div class="service-metrics" style="align-items: center;">
+                <span id="lifetime-count" style="font-size: 1.8rem; color: #0EA5E9; font-weight: 800; line-height: 1;">...</span>
+                <span class="status-badge" style="background: rgba(14, 165, 233, 0.2); color: #0EA5E9; display: flex; align-items: center;">TOTAL HITS</span>
             </div>
         </div>
 
@@ -167,7 +183,28 @@
                     });
                 }
             });
+
+            // FETCH TOTAL LIFETIME VIEWS
+            async function fetchLifetimeViews() {
+                try {
+                    const { count, error } = await supabaseClient
+                        .from('page_views')
+                        .select('*', { count: 'exact', head: true });
+                    
+                    if (error) throw error;
+                    document.getElementById('lifetime-count').innerText = count;
+                } catch (e) {
+                    console.log("Could not fetch total views. Is the page_views table setup?");
+                    document.getElementById('lifetime-count').innerText = "N/A";
+                }
+            }
+            fetchLifetimeViews();
         }
+
+        // Display Personal Visits from localStorage
+        const personalCount = parseInt(localStorage.getItem('personalVisits') || '0');
+        document.getElementById('personal-visits-count').innerText = personalCount;
+
     </script>
 </body>
 </html>
