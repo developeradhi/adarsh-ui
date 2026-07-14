@@ -1608,3 +1608,26 @@ function initWebGLGraph() {
     }
 }
 setTimeout(initWebGLGraph, 1000);
+
+// --- GLOBAL PRESENCE TRACKING (Runs on index.html) ---
+if (typeof supabase !== 'undefined') {
+    const SUPABASE_URL = 'https://elfoqjjblctmqrbxmpvx.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVsZm9xampibGN0bXFyYnhtcHZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwNDAzNDAsImV4cCI6MjA5OTYxNjM0MH0.nHwRJqLjMPDNxUci7Qq_FiTzRCZ4RN8PC1-6gBX5atY';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const channel = supabaseClient.channel('portfolio-live-viewers', {
+        config: { presence: { key: 'viewer_' + Math.random().toString(36).substr(2, 9) } }
+    });
+    
+    channel.subscribe(async (status) => {
+        if (status === 'SUBSCRIBED') {
+            let localCity = 'Unknown Location'; let localCountry = '';
+            try {
+                const res = await fetch('https://get.geojs.io/v1/ip/geo.json');
+                const data = await res.json();
+                if(data.city) localCity = data.city;
+                if(data.country) localCountry = data.country;
+            } catch(e) {}
+            await channel.track({ city: localCity, country: localCountry, joined_at: new Date().toISOString() });
+        }
+    });
+}

@@ -34,6 +34,24 @@
         <div class="system-overall">
             All Systems Operational (99.99% Uptime)
         </div>
+        
+        <!-- Live Viewer Telemetry -->
+        <div class="service-item" style="margin-bottom: 30px; border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.05);">
+            <div style="display: flex; flex-direction: column;">
+                <div class="service-name" style="display: flex; align-items: center; gap: 10px; color: #10B981;">
+                    <div style="width:10px; height:10px; border-radius:50%; background:#10B981; box-shadow: 0 0 10px #10B981; animation: pulse 2s infinite;"></div>
+                    Live Ecosystem Viewers
+                </div>
+                <div id="presence-list" style="margin-top: 10px; font-family: 'Fira Code', monospace; font-size: 0.85rem; color: #94a3b8; display: flex; flex-direction: column; gap: 5px;">
+                    Establishing secure uplink...
+                </div>
+            </div>
+            <div class="service-metrics" style="align-items: center;">
+                <span id="presence-count" style="font-size: 1.8rem; color: #10B981; font-weight: 800; line-height: 1;">0</span>
+                <span class="status-badge status-up" style="display: flex; align-items: center;">ACTIVE</span>
+            </div>
+        </div>
+
         <div class="service-list" id="services">
             <!-- Populated by JS -->
         </div>
@@ -76,6 +94,80 @@
                 el.querySelector('.status-badge').innerText = 'DOWN';
             }
         });
+    </script>
+    <style>
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // --- LIVE PRESENCE TRACKING WITH SUPABASE ---
+        const SUPABASE_URL = 'https://elfoqjjblctmqrbxmpvx.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVsZm9xampibGN0bXFyYnhtcHZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwNDAzNDAsImV4cCI6MjA5OTYxNjM0MH0.nHwRJqLjMPDNxUci7Qq_FiTzRCZ4RN8PC1-6gBX5atY';
+        
+        if (typeof supabase !== 'undefined') {
+            const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            const channel = supabaseClient.channel('portfolio-live-viewers', {
+                config: {
+                    presence: {
+                        key: 'viewer_' + Math.random().toString(36).substr(2, 9),
+                    },
+                },
+            });
+            
+            let localCity = 'Unknown Location';
+            let localCountry = '';
+            
+            channel.on('presence', { event: 'sync' }, () => {
+                const state = channel.presenceState();
+                let totalViewers = 0;
+                const locations = [];
+                
+                for (const id in state) {
+                    state[id].forEach(viewer => {
+                        totalViewers++;
+                        if (viewer.city && viewer.city !== 'Unknown Location') {
+                            locations.push(`• ${viewer.city}, ${viewer.country}`);
+                        } else {
+                            locations.push(`• Encrypted Viewer Node`);
+                        }
+                    });
+                }
+                
+                const countEl = document.getElementById('presence-count');
+                if (countEl) countEl.innerText = totalViewers;
+                
+                const listEl = document.getElementById('presence-list');
+                if (listEl) {
+                    if (locations.length === 0) {
+                        listEl.innerHTML = 'Awaiting nodes...';
+                    } else {
+                        listEl.innerHTML = locations.join('<br>');
+                    }
+                }
+            });
+
+            channel.subscribe(async (status) => {
+                if (status === 'SUBSCRIBED') {
+                    try {
+                        const res = await fetch('https://get.geojs.io/v1/ip/geo.json');
+                        const data = await res.json();
+                        if (data.city) localCity = data.city;
+                        if (data.country) localCountry = data.country;
+                    } catch (e) {
+                        console.log("Location fetch failed");
+                    }
+                    await channel.track({
+                        city: localCity,
+                        country: localCountry,
+                        joined_at: new Date().toISOString()
+                    });
+                }
+            });
+        }
     </script>
 </body>
 </html>
