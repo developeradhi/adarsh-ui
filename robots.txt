@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /status.html
 
 Sitemap: https://adhi.is-a.dev/sitemap.xml
