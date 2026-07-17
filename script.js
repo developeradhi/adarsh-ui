@@ -1368,6 +1368,18 @@ setTimeout(() => {
                     conn.send({ action: 'SPOTLIGHT' });
                     navigator.vibrate && navigator.vibrate(50);
                 });
+                document.getElementById('remote-nav-about-btn').addEventListener('click', () => {
+                    conn.send({ action: 'GOTO_ABOUT' });
+                    navigator.vibrate && navigator.vibrate(30);
+                });
+                document.getElementById('remote-nav-work-btn').addEventListener('click', () => {
+                    conn.send({ action: 'GOTO_WORK' });
+                    navigator.vibrate && navigator.vibrate(30);
+                });
+                document.getElementById('remote-nav-connect-btn').addEventListener('click', () => {
+                    conn.send({ action: 'GOTO_CONNECT' });
+                    navigator.vibrate && navigator.vibrate(30);
+                });
             });
             
             conn.on('close', () => {
@@ -1400,6 +1412,7 @@ setTimeout(() => {
                 const peer = typeof peerConfig !== 'undefined' ? new Peer(hostId, peerConfig) : new Peer(hostId);
                 
                 peer.on('open', (id) => {
+                    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
                     const connectUrl = window.location.origin + window.location.pathname + '?remote=' + id;
                     
                     // Generate QR Code
@@ -1414,9 +1427,12 @@ setTimeout(() => {
                         correctLevel : QRCode.CorrectLevel.L
                     });
                     
+                    let localWarning = isLocal ? `<span style="color:orange; font-size:0.75rem;">Warning: You are on localhost. QR scanning on phone will fail unless you use your PC's local IP address.</span><br>` : '';
+                    
                     syncLog.innerHTML = `
                         <div style="display:flex; flex-direction:column; gap:5px;">
                             <span style="color:#10b981;">Tunnel Opened. Waiting for mobile...</span>
+                            ${localWarning}
                             <span style="font-size:0.7rem;">Or open this link on your phone: <br><a href="${connectUrl}" target="_blank" style="color:#6366f1;">${connectUrl}</a></span>
                         </div>
                     `;
@@ -1461,6 +1477,18 @@ setTimeout(() => {
                             setTimeout(() => document.body.style.filter = '', 150);
                             setTimeout(() => document.body.style.filter = 'hue-rotate(-90deg) invert(1)', 300);
                             setTimeout(() => document.body.style.filter = '', 450);
+                        }
+                        else if (data.action === 'GOTO_ABOUT') {
+                            const sec = document.getElementById('about');
+                            if (sec) sec.scrollIntoView({ behavior: 'smooth' });
+                        }
+                        else if (data.action === 'GOTO_WORK') {
+                            const sec = document.getElementById('projects');
+                            if (sec) sec.scrollIntoView({ behavior: 'smooth' });
+                        }
+                        else if (data.action === 'GOTO_CONNECT') {
+                            const sec = document.getElementById('connect');
+                            if (sec) sec.scrollIntoView({ behavior: 'smooth' });
                         }
                     });
                 });
