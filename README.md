@@ -58,7 +58,7 @@ We welcome structural improvements and architectural optimizations. Please see o
 
 <div align="center">
   
-*Designed and Engineered by [Adarsh B A](https://adhi.is-a.dev) (2026).*<br>
+*Designed and Engineered by [Adarsh B A](https://www.linkedin.com/in/developeradhi) (2026).*<br>
 Released under the [MIT License](LICENSE).
 
 </div>
