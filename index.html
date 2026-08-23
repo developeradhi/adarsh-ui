@@ -1,4 +1,10 @@
 <!DOCTYPE html><html lang="en"><head>
+    <!-- Maintenance Mode Check -->
+    <script>
+      fetch('https://mznzvxwzugimqzhhdnae.supabase.co/rest/v1/site_settings?select=is_maintenance_mode', {
+        headers: { 'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im16bnp2eHd6dWdpbXF6aGhkbmFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5ODkzNjksImV4cCI6MjEwMTU2NTM2OX0.AL0sY92IZeP_vSyqYRoKoKkE3oMPvNYukNU3uNbJhWs' }
+      }).then(r=>r.json()).then(d=>{if(d[0]?.is_maintenance_mode) window.location.href='maintenance.html'});
+    </script>
     <!-- Google Analytics (GA4) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-4CX5D140CK"></script>
     <script>
