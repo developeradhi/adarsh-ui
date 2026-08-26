@@ -62,69 +62,62 @@
           overflow-y: auto;
         }
 
-        /* Wordmark top-right */
+        /* Wordmark top-LEFT — exactly like mockup */
         .m-wordmark {
-          position: absolute; top: 2.5rem; right: 3rem;
-          font-family: 'Fira Code', monospace;
-          font-size: 0.78rem; font-weight: 500;
-          color: #94a3b8; letter-spacing: 0.06em;
+          position: absolute; top: 2.5rem; left: 8%;
+          font-size: 1rem; font-weight: 800; color: #0f172a; letter-spacing: -0.01em;
         }
 
         /* Label */
         .m-label {
           display: inline-flex; align-items: center; gap: 8px;
-          padding: 6px 14px; border-radius: 100px;
-          background: #fef9c3; border: 1px solid #fde047;
-          color: #854d0e; font-size: 0.78rem; font-weight: 700;
-          letter-spacing: 0.06em; text-transform: uppercase;
+          padding: 7px 16px; border-radius: 100px;
+          background: #fef9c3; border: 1px solid #fde68a;
+          color: #92400e; font-size: 0.82rem; font-weight: 600;
           margin-bottom: 2rem; align-self: flex-start;
         }
 
         .m-panel h1 {
-          font-size: clamp(2.6rem, 4vw, 3.8rem);
-          font-weight: 900; color: #0f172a; line-height: 1.05;
-          letter-spacing: -0.03em; margin-bottom: 1.5rem;
+          font-size: clamp(2.8rem, 4.5vw, 4.2rem);
+          font-weight: 900; color: #0f172a; line-height: 1.0;
+          letter-spacing: -0.04em; margin-bottom: 1.5rem;
         }
 
         .m-panel p {
-          font-size: 1.05rem; color: #64748b;
-          line-height: 1.75; max-width: 400px; margin-bottom: 2.8rem;
+          font-size: 1rem; color: #64748b;
+          line-height: 1.75; max-width: 420px; margin-bottom: 2.4rem;
         }
 
-        /* Divider */
-        .m-divider { width: 100%; max-width: 440px; height: 1px; background: #e2e8f0; margin-bottom: 2.4rem; }
-
-        /* Profile row */
-        .m-profile { display: flex; align-items: center; gap: 14px; margin-bottom: 2.8rem; max-width: 440px; }
+        /* Profile row — 3 lines exactly like mockup */
+        .m-profile { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 2.4rem; max-width: 440px; }
         .m-avatar {
           width: 52px; height: 52px; border-radius: 50%;
-          border: 2px solid #e2e8f0; flex-shrink: 0;
-          object-fit: cover;
+          border: 2px solid #e2e8f0; flex-shrink: 0; object-fit: cover;
         }
-        .m-profile-name { font-size: 1rem; font-weight: 700; color: #0f172a; line-height: 1.3; }
-        .m-profile-role { font-size: 0.85rem; color: #94a3b8; display: flex; align-items: center; gap: 6px; }
-        .m-online-dot { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; display: inline-block; }
+        .m-profile-name { font-size: 1rem; font-weight: 700; color: #0f172a; margin-bottom: 2px; }
+        .m-profile-sub { font-size: 0.875rem; color: #475569; margin-bottom: 4px; }
+        .m-profile-role { font-size: 0.82rem; color: #64748b; display: flex; align-items: center; gap: 6px; }
+        .m-online-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; display: inline-block; flex-shrink: 0; }
 
         /* CTA Button */
         .m-btn {
-          display: inline-flex; align-items: center; gap: 10px;
+          display: inline-flex; align-items: center;
           background: #0f172a; color: #fff;
-          padding: 15px 30px; border-radius: 10px;
+          padding: 14px 28px; border-radius: 8px;
           font-weight: 700; font-size: 0.95rem;
-          text-decoration: none; letter-spacing: 0.01em;
-          transition: transform 0.15s, box-shadow 0.15s;
+          text-decoration: none;
+          transition: transform 0.15s, background 0.15s;
           align-self: flex-start;
-          box-shadow: 0 4px 16px rgba(15,23,42,0.25);
         }
-        .m-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(15,23,42,0.3); }
+        .m-btn:hover { background: #1e293b; transform: translateY(-1px); }
 
         /* Mobile */
         @media (max-width: 860px) {
           .m-layout { flex-direction: column; }
           .m-photo { flex: 0 0 45vh; }
-          .m-panel { padding: 3rem 7% 3rem; }
-          .m-wordmark { top: 1.5rem; right: 1.5rem; }
-          .m-panel h1 { font-size: 2.4rem; }
+          .m-panel { padding: 3.5rem 7% 3rem; }
+          .m-wordmark { top: 1.5rem; left: 7%; }
+          .m-panel h1 { font-size: 2.6rem; }
         }
       `;
       document.head.appendChild(mStyle);
@@ -149,27 +142,21 @@
                   </div>
                   <div class="m-panel">
                     <div class="m-wordmark">adhi.is-a.dev</div>
-                    <div class="m-label">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2z"/></svg>
-                      Maintenance in Progress
-                    </div>
-                    <h1>Under<br>Renovation</h1>
-                    <p>We are currently upgrading the digital workspace with refined code and improved performance. Back very soon.</p>
-                    <div class="m-divider"></div>
+                    <div class="m-label">🔒 Maintenance in Progress</div>
+                    <h1>Under Renovation</h1>
+                    <p>We are currently enhancing our digital workspace to better serve you. Expect improvements and a refined experience very soon. We apologize for the brief interruption. Follow our progress.</p>
                     <div class="m-profile">
-                      <img class="m-avatar" src="https://avatars.githubusercontent.com/u/154442004?v=4" alt="Adarsh">
+                      <img class="m-avatar" src="https://avatars.githubusercontent.com/u/154442004?v=4" alt="Adarsh B A">
                       <div>
                         <div class="m-profile-name">Adarsh B A</div>
+                        <div class="m-profile-sub">Full-Stack Engineer</div>
                         <div class="m-profile-role">
                           <span class="m-online-dot"></span>
-                          Full-Stack Engineer
+                          Available soon
                         </div>
                       </div>
                     </div>
-                    <a href="mailto:contact@adhi.is-a.dev" class="m-btn">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                      Contact Engineer
-                    </a>
+                    <a href="mailto:contact@adhi.is-a.dev" class="m-btn">Contact Engineer</a>
                   </div>
                 </div>
               `;
