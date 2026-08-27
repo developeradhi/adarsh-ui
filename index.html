@@ -129,6 +129,7 @@
           const isM = d[0]?.is_maintenance_mode;
           let overlay = document.getElementById('nexus-maintenance-overlay');
           if (isM) {
+            // MAINTENANCE ON: keep portfolio hidden, show overlay
             if (!overlay) {
               overlay = document.createElement('div');
               overlay.id = 'nexus-maintenance-overlay';
@@ -163,12 +164,15 @@
               document.body.appendChild(overlay);
             }
             overlay.classList.add('active');
+            // DO NOT remove anti-flicker — keep portfolio hidden underneath
           } else {
+            // MAINTENANCE OFF: reveal site, hide overlay
             const flicker = document.getElementById('maintenance-anti-flicker');
             if (flicker) flicker.remove();
             if (overlay) overlay.classList.remove('active');
           }
         }).catch(() => {
+          // DB error: default to showing the site (don't block visitors)
           const flicker = document.getElementById('maintenance-anti-flicker');
           if (flicker) flicker.remove();
         });
@@ -176,7 +180,8 @@
 
       checkStatus();
       setInterval(checkStatus, 5000);
-      setTimeout(() => { const el = document.getElementById('maintenance-anti-flicker'); if (el) el.remove(); }, 2000);
+      // Fallback ONLY if Supabase takes more than 3s — but only reveal site, never when maintenance is on
+      // (This is handled inside checkStatus itself; no unconditional timeout needed)
     </script>
     <!-- Google Analytics (GA4) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-4CX5D140CK"></script>
