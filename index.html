@@ -114,10 +114,16 @@
         /* Mobile */
         @media (max-width: 860px) {
           .m-layout { flex-direction: column; }
-          .m-photo { flex: 0 0 45vh; }
-          .m-panel { padding: 3.5rem 7% 3rem; }
-          .m-wordmark { top: 1.5rem; left: 7%; }
-          .m-panel h1 { font-size: 2.6rem; }
+          .m-photo { flex: 0 0 30vh; }
+          .m-panel { padding: 4rem 6% 2rem; justify-content: flex-start; }
+          .m-wordmark { top: 1.2rem; left: 6%; }
+          .m-label { margin-bottom: 1.2rem; }
+          .m-panel h1 { font-size: 2.2rem; margin-bottom: 1rem; }
+          .m-panel p { font-size: 0.95rem; margin-bottom: 1.5rem; line-height: 1.6; }
+          .m-profile { margin-bottom: 1.5rem; gap: 12px; }
+          .m-avatar { width: 44px; height: 44px; }
+          .m-btn { width: 100%; justify-content: center; text-align: center; }
+          .m-photo-badge { bottom: 1rem; left: 1rem; padding: 8px 14px; font-size: 0.75rem; }
         }
       `;
       document.head.appendChild(mStyle);
